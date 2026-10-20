@@ -72,6 +72,7 @@ class _AddHomeOfficeScreenState extends State<AddHomeOfficeScreen> {
   String nameList = '';
   int lastRecnoNum = 0;
   int recnoRegister = 0;
+  bool isRequestReady = true;
 
   @override
   void initState() {
@@ -85,171 +86,211 @@ class _AddHomeOfficeScreenState extends State<AddHomeOfficeScreen> {
   Widget build(BuildContext context) {
     DateTime initialDate = DateTime.now();
     DateTime lastDate = initialDate.add(const Duration(days: 60));
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return (!_isloading)
         ? Scaffold(
             appBar: AppBar(
               foregroundColor: Colors.black,
-              title: const Text('Editar Home Office'),
+              title: const Text('Adicionar Home Office'),
               titleTextStyle: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
               backgroundColor: Colors.greenAccent,
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(12),
-              child: SingleChildScrollView(
-                controller: _controller,
-                child: Column(
-                  children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(2.0),
-                    //   child: Row(
-                    //     children: [
-                    //       const Padding(
-                    //         padding: EdgeInsets.only(left: 2.0),
-                    //         child: Text(
-                    //           'Colaborador?',
-                    //           style: TextStyle(fontSize: 20),
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.only(left: 10.0),
-                    //         child: DropdownButton<String>(
-                    //           value: departamento,
-                    //           icon: const Icon(Icons.arrow_downward),
-                    //           elevation: 16,
-                    //           style: const TextStyle(
-                    //               overflow: TextOverflow.ellipsis,
-                    //               color: Colors.deepPurple,
-                    //               fontSize: 16),
-                    //           items: name.map<DropdownMenuItem<String>>(
-                    //               (String value) {
-                    //             return DropdownMenuItem<String>(
-                    //               value: value,
-                    //               child: SizedBox(
-                    //                 width: 200,
-                    //                 child: Text(
-                    //                   value,
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                 ),
-                    //               ),
-                    //             );
-                    //           }).toList(),
-                    //           onChanged: (String? value) {
-                    //             // This is called when the user selects an item.
-                    //             setState(() {
-                    //               departamento = value!;
-                    //             });
-                    //           },
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ), // Nome
-                    // const Divider(
-                    //   height: 2,
-                    //   thickness: 3,
-                    // ),
-                    Card(
-                      elevation: 4,
-                      shadowColor: Colors.grey,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: TextField(
-                            controller: inicioController,
-                            style: const TextStyle(fontSize: 18),
-                            decoration: const InputDecoration(
-                              labelText: "Data: ",
+            body: Scaffold(
+              backgroundColor: Colors.blueGrey.withAlpha(30),
+              body: Padding(
+                padding: const EdgeInsets.all(12),
+                child: SingleChildScrollView(
+                    controller: _controller,
+                    child: Column(
+                      children: [
+                        Card(
+                          elevation: 4,
+                          shadowColor: Colors.grey,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.date_range,
+                                  size: 30,
+                                  color: Colors.black.withAlpha(130),
+                                ),
+                                SizedBox(
+                                  width: screenWidth - 115,
+                                  child: TextField(
+                                      controller: inicioController,
+                                      style: const TextStyle(fontSize: 18),
+                                      decoration: const InputDecoration(
+                                        labelText: "Data: ",
+                                      ),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        pickedDateInicio = await showDatePicker(
+                                          selectableDayPredicate: (DateTime date) {
+                                            if (date.weekday == DateTime.saturday ||
+                                                date.weekday == DateTime.sunday) {
+                                              return false;
+                                            }
+                                            return true;
+                                          },
+                                          context: context,
+                                          initialDate: initialDate,
+                                          firstDate: initialDate,
+                                          lastDate: lastDate,
+                                        );
+                                  
+                                        if (pickedDateInicio != null) {
+                                          String formattedDate = DateFormat('dd/MM/yyyy')
+                                              .format(pickedDateInicio!);
+                                  
+                                          setState(() {
+                                            inicioController.text = formattedDate;
+                                            time = DateTime(
+                                                int.parse(inicioController.text
+                                                    .substring(6, 10)),
+                                                int.parse(inicioController.text
+                                                    .substring(3, 5)),
+                                                int.parse(inicioController.text.substring(
+                                                    0,
+                                                    2))); //set foratted date to TextField value.
+                                          });
+                                          primaryValidation();
+                                        } else {
+                                          String formattedDate = DateFormat('dd/MM/yyyy')
+                                              .format(initialDate);
+                                  
+                                          setState(() {
+                                            formattedDate;
+                                          });
+                                        }
+                                      }),
+                                ),
+                              ],
                             ),
-                            readOnly: true,
-                            onTap: () async {
-                              pickedDateInicio = await showDatePicker(
-                                selectableDayPredicate: (DateTime date) {
-                                  if (date.weekday == DateTime.saturday ||
-                                      date.weekday == DateTime.sunday) {
-                                    return false;
-                                  }
-                                  return true;
-                                },
-                                context: context,
-                                initialDate: initialDate,
-                                firstDate: initialDate,
-                                lastDate: lastDate,
-                              );
-
-                              if (pickedDateInicio != null) {
-                                String formattedDate = DateFormat('dd/MM/yyyy')
-                                    .format(pickedDateInicio!);
-
-                                setState(() {
-                                  inicioController.text = formattedDate;
-                                  time = DateTime(
-                                      int.parse(inicioController.text
-                                          .substring(6, 10)),
-                                      int.parse(inicioController.text
-                                          .substring(3, 5)),
-                                      int.parse(inicioController.text.substring(
-                                          0,
-                                          2))); //set foratted date to TextField value.
-                                });
-                                primaryValidation();
-                              } else {
-                                String formattedDate = DateFormat('dd/MM/yyyy')
-                                    .format(initialDate);
-
-                                setState(() {
-                                  formattedDate;
-                                });
-                              }
-                            }),
-                      ),
-                    ),
-                    Card(
-                      elevation: 4,
-                      shadowColor: Colors.grey,
-                      child: SizedBox(
-                        height: 450,
-                        child: Scrollbar(
-                          child: Material(
-                            child: ListView(
-                              children: generateListTileBancoHoras(
-                                database: databaseSzeList,
-                                selectedItems: _selectedItems,
+                          ),
+                        ),
+                        Card(
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(
+                              color: Colors.black.withAlpha(20), // Border color
+                              width: 1, // Border width
+                            ),
+                          ),
+                          shadowColor: Colors.grey,
+                          child: SizedBox(
+                            height: 450,
+                            child: Scrollbar(
+                              child: Material(
+                                borderRadius: BorderRadius.circular(15),
+                                child: ListView(
+                                  children: generateListTileBancoHoras(
+                                    database: databaseSzeList,
+                                    selectedItems: _selectedItems,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25.0, bottom: 30),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.greenAccent),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25.0, bottom: 30),
+                          child: (isRequestReady)
+                              ? InkWell(
+                                onTap: () {
+                                    if (inicioController.text == '') {
+                                      ErrorDialog(context, 'Selecionar o dia que deseja incluir.');
+                                    } else {
+                                      setState(() {
+                                        isRequestReady = false;
+                                      });
+                                      getSzh010LastRecno();
+                                      for (final element in _selectedItems) {
+                                        lastRecno[element] = lastRecnoNum;
+                                        lastRecnoNum = lastRecnoNum + 1;
+                                      }
+                                      validateHomeOffice(context);
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      color: Colors.greenAccent,
+                                      borderRadius: BorderRadius.circular(30)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              'Adicionar',
+                                              style: GoogleFonts.actor(
+                                                textStyle: const TextStyle(fontSize: 20),
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(30),
+                                              color: Colors.black.withAlpha(50)
+                                            ),
+                                            child: const Icon(
+                                              Icons.chevron_right_rounded, 
+                                              size: 30, 
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              )
+                              : InkWell(
+                                onTap: () {                                    
+                                    ErrorDialog(
+                                        context, "Aguarde o processamento.");
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(30)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              'Aguarde',
+                                              style: GoogleFonts.actor(
+                                                textStyle: const TextStyle(fontSize: 20),
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              )
                         ),
-                        onPressed: () {
-                          getSzh010LastRecno();
-                          for (final element in _selectedItems) {
-                            lastRecno[element] = lastRecnoNum;
-                            lastRecnoNum = lastRecnoNum + 1;
-                          }
-                          validateHomeOffice(context);
-                        },
-                        child: Text(
-                          'Adicionar',
-                          style: GoogleFonts.acme(
-                            textStyle: const TextStyle(fontSize: 30),
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                        // Button Solicitar
+                      ],
                     ),
-                    // Button Solicitar
-                  ],
-                ),
+                  ),
               ),
             ),
             drawer: menuDrawer(context),
@@ -357,6 +398,9 @@ class _AddHomeOfficeScreenState extends State<AddHomeOfficeScreen> {
 
       _homeOfficeService.register(internalSzh010).then((value) {
         if (value) {
+          setState(() {
+            isRequestReady = true;
+          });
           Navigator.pop(context, DisposeStatus.success);
           Navigator.push(
             context,
@@ -372,6 +416,9 @@ class _AddHomeOfficeScreenState extends State<AddHomeOfficeScreen> {
           );
           return SuccessDialog(context, 'HomeOffice cadastrado com Sucesso!');
         } else {
+          setState(() {
+            isRequestReady = true;
+          });
           Navigator.pop(context, DisposeStatus.error);
           return ErrorDialog(context, 'Erro na solicitação, tente mais tarde!');
         }

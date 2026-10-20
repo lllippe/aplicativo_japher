@@ -9,6 +9,8 @@ import 'package:projeto_aucs/models/sze010.dart';
 import 'package:projeto_aucs/models/sze010_falta_dias.dart';
 import 'package:projeto_aucs/screens/add_screen/add_bancohoras_screen.dart';
 import 'package:projeto_aucs/screens/bancohoras_screen/bancoHoras_screen_list.dart';
+import 'package:projeto_aucs/screens/commom/error_dialog.dart';
+import 'package:projeto_aucs/screens/commom/explanation_dialog.dart';
 import 'package:projeto_aucs/services/ferias_service.dart';
 import 'package:projeto_aucs/services/periodo_service.dart';
 import 'package:projeto_aucs/services/spi010_service.dart';
@@ -59,7 +61,7 @@ class _BancoHorasState extends State<BancoHoras> {
   List<TableRow> tableContainerPeriodos = [];
   List<ListTile> listTile = [];
   bool _isloading = false;
-    TextEditingController inicioController = TextEditingController();
+  TextEditingController inicioController = TextEditingController();
   TextEditingController fimController = TextEditingController();
   Spi010 spi010 = Spi010.empty();
   DateTime? pickedDateFim;
@@ -68,12 +70,13 @@ class _BancoHorasState extends State<BancoHoras> {
   List<String> name = [];
   bool _isSearchReady = false;
   bool _showSearch = false;
-  String returnSearch = 'Realize sua pesquisa.';
+  String returnSearch = '';
   int detail = 0;
   double saldoInicial = 0;
   double saldoFinal = 0;
   double saldoPeriodo = 0;
   bool isExpanded = false;
+  bool isRequestReady = true;
 
   @override
   void initState() {
@@ -99,28 +102,199 @@ class _BancoHorasState extends State<BancoHoras> {
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
-                      titleTextStyle: GoogleFonts.acme(
+                      automaticallyImplyLeading: false,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Icon(
+                              Icons.access_time,
+                              size: 30,
+                              color: Colors.black.withAlpha(130),
+                            ),
+                          ),
+                          const Text('Banco de horas'),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 50.0),
+                            child: InkWell(
+                              onTap: () {
+                                explanationDialog(context, 
+                                  'Como adicionar horas',
+                                  Column(
+                                    children: [
+                                      Padding(padding: const EdgeInsets.only(bottom: 15.0),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.access_time,
+                                            size: 25,
+                                            color: Colors.black.withAlpha(130)),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 10.0),
+                                                child: Text('O ícone pode ser clicado para alterar a quantidade de horas a ser somada ou subtraída na requisição da seguinte forma:',
+                                                  overflow: TextOverflow.values.first
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(
+                                        thickness: 1,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 15.0, top: 15),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.access_time,
+                                            size: 25,
+                                            color: Colors.black.withAlpha(130)),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 10.0),
+                                                child: Text('O ícone indica que você irá somar ou subtrair 0.5 hora à solicitação ao clicar em + ou -',
+                                                  overflow: TextOverflow.values.first
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(
+                                        thickness: 1,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.calendar_month,
+                                            size: 25,
+                                            color: Colors.black.withAlpha(130)),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 10.0),
+                                                child: Text('O ícone indica que você irá somar ou subtrair 7.5 horas à solicitação ao clicar em + ou -',
+                                                  overflow: TextOverflow.values.first
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(
+                                        thickness: 1,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.block,
+                                            size: 25,
+                                            color: Colors.black.withAlpha(130)),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 10.0),
+                                                child: Text('O ícone retorna para 0 a quantidade de horas a solicitar.',
+                                                  overflow: TextOverflow.values.first
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Divider(
+                                        thickness: 1,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 15.0),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                color: Colors.greenAccent,
+                                                borderRadius: BorderRadius.circular(30)
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 8.0),
+                                                      child: Text(
+                                                        'Adicionar',
+                                                        style: GoogleFonts.actor(
+                                                          textStyle: const TextStyle(fontSize: 20),
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(30),
+                                                        color: Colors.black.withAlpha(50)
+                                                      ),
+                                                      child: const Icon(
+                                                        Icons.chevron_right_rounded, 
+                                                        size: 30, 
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 10.0),
+                                                child: Text('Clique em Adicionar e aguarde o processamento.',
+                                                  overflow: TextOverflow.values.first
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ));
+                                },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(30),
+                                  borderRadius: BorderRadius.circular(30)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.question_mark,
+                                    size: 20,
+                                    color: Colors.black.withAlpha(150)),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      titleTextStyle: GoogleFonts.actor(
                           textStyle: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 25,
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
                       )),
                       backgroundColor: Colors.greenAccent,
-                      title: const Text(
-                        'Banco de Horas',
-                        textAlign: TextAlign.center,
-                      ),
                       pinned: true,
                       floating: true,
                       bottom: TabBar(
-                        labelStyle: GoogleFonts.acme(
+                        labelStyle: GoogleFonts.actor(
                             textStyle: const TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 23,
                         )),
                         labelColor: Colors.black,
                         indicatorColor: Colors.black,
-                        unselectedLabelStyle: GoogleFonts.acme(
+                        unselectedLabelStyle: GoogleFonts.actor(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 18,
@@ -148,231 +322,345 @@ class _BancoHorasState extends State<BancoHoras> {
                         spi010: spi010,
                         isEditing: false,
                       ),
-                      SingleChildScrollView(
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width_screen - 30,
-                                  height: 250,
+                      Scaffold(
+                        backgroundColor: Colors.blueGrey.withAlpha(30),
+                        body: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+                                child: Card(
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    side: BorderSide(
+                                      color: Colors.black.withAlpha(20), // Border color
+                                      width: 1, // Border width
+                                    ),
+                                  ),
                                   child: Column(
                                     children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8),
-                                        child: TextField(
-                                            controller: inicioController,
-                                            style:
-                                                const TextStyle(fontSize: 18),
-                                            decoration: const InputDecoration(
-                                              labelText: "Data Inicial: ",
-                                            ),
-                                            readOnly: true,
-                                            onTap: () async {
-                                              pickedDateInicio =
-                                                  await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: initialDate,
-                                                lastDate: lastDate,
-                                              );
-
-                                              if (pickedDateInicio != null) {
-                                                String formattedDate =
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(
-                                                            pickedDateInicio!);
-
-                                                setState(() {
-                                                  inicioController.text =
-                                                      formattedDate;
-                                                });
-                                              } else {
-                                                String formattedDate =
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(initialDate);
-
-                                                setState(() {
-                                                  formattedDate; //set foratted date to TextField value.
-                                                });
-                                              }
-                                            }),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8),
-                                        child: TextField(
-                                            controller: fimController,
-                                            style:
-                                                const TextStyle(fontSize: 18),
-                                            decoration: const InputDecoration(
-                                              labelText: "Data Final: ",
-                                            ),
-                                            readOnly: true,
-                                            onTap: () async {
-                                              pickedDateFim =
-                                                  await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: initialDate,
-                                                lastDate: lastDate,
-                                              );
-
-                                              if (pickedDateFim != null) {
-                                                String formattedDate =
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(pickedDateFim!);
-
-                                                setState(() {
-                                                  fimController.text =
-                                                      formattedDate;
-                                                });
-                                              } else {
-                                                String formattedDate =
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(initialDate);
-
-                                                setState(() {
-                                                  formattedDate; //set foratted date to TextField value.
-                                                });
-                                              }
-                                            }),
+                                      SizedBox(
+                                        width: width_screen - 20,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 10.0),
+                                                child: Icon(
+                                                  Icons.date_range,
+                                                  size: 30,
+                                                  color: Colors.black.withAlpha(80),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 25.0, right: 15,),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: width_screen - 115,
+                                                      child: TextField(
+                                                          controller: inicioController,
+                                                          style:
+                                                              const TextStyle(fontSize: 18),
+                                                          decoration: const InputDecoration(
+                                                            labelText: "Data Inicial: ",
+                                                          ),
+                                                          readOnly: true,
+                                                          onTap: () async {
+                                                            pickedDateInicio =
+                                                                await showDatePicker(
+                                                              context: context,
+                                                              initialDate: DateTime.now(),
+                                                              firstDate: initialDate,
+                                                              lastDate: lastDate,
+                                                            );
+                                                            if (pickedDateInicio != null) {
+                                                              String formattedDate =
+                                                                  DateFormat('dd/MM/yyyy')
+                                                                      .format(
+                                                                          pickedDateInicio!);
+                                                              setState(() {
+                                                                inicioController.text =
+                                                                    formattedDate;
+                                                              });
+                                                            } else {
+                                                              String formattedDate =
+                                                                  DateFormat('dd/MM/yyyy')
+                                                                      .format(initialDate);
+                                                              setState(() {
+                                                                formattedDate; //set foratted date to TextField value.
+                                                              });
+                                                            }
+                                                          }),
+                                                    ),
+                                                    SizedBox(
+                                                      width: width_screen - 115,
+                                                      child: TextField(
+                                                          controller: fimController,
+                                                          style:
+                                                              const TextStyle(fontSize: 18),
+                                                          decoration: const InputDecoration(
+                                                            labelText: "Data Final: ",
+                                                          ),
+                                                          readOnly: true,
+                                                          onTap: () async {
+                                                            pickedDateFim =
+                                                                await showDatePicker(
+                                                              context: context,
+                                                              initialDate: DateTime.now(),
+                                                              firstDate: initialDate,
+                                                              lastDate: lastDate,
+                                                            );
+                                                            if (pickedDateFim != null) {
+                                                              String formattedDate =
+                                                                  DateFormat('dd/MM/yyyy')
+                                                                      .format(pickedDateFim!);
+                                                                              
+                                                              setState(() {
+                                                                fimController.text =
+                                                                    formattedDate;
+                                                              });
+                                                            } else {
+                                                              String formattedDate =
+                                                                  DateFormat('dd/MM/yyyy')
+                                                                      .format(initialDate);
+                                                              setState(() {
+                                                                formattedDate; //set foratted date to TextField value.
+                                                              });
+                                                            }
+                                                          }),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Row(
                                           children: [
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                'Colaborador',
-                                                style: TextStyle(fontSize: 20),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 10.0, right: 20),
+                                              child: Icon(
+                                                Icons.person,
+                                                size: 30,
+                                                color: Colors.black.withAlpha(130),
                                               ),
                                             ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(left: 8.0),
-                                              child: DropdownButton<String>(
-                                                value: departamento,
-                                                icon: const Icon(
-                                                    Icons.arrow_downward),
-                                                elevation: 16,
-                                                style: const TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    color: Colors.deepPurple,
-                                                    fontSize: 16),
-                                                items: name.map<
-                                                        DropdownMenuItem<
-                                                            String>>(
-                                                    (String value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: value,
-                                                    child: SizedBox(
-                                                      width: width_screen - 200,
-                                                      child: Text(
-                                                        value,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                            SizedBox(
+                                              width: width_screen - 115,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0),
+                                                child: DropdownButton<String>(
+                                                  value: departamento,
+                                                  icon: const Icon(
+                                                      Icons.arrow_downward),
+                                                  elevation: 16,
+                                                  style: const TextStyle(
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      color: Colors.black,
+                                                      fontSize: 16),
+                                                  items: name.map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: SizedBox(
+                                                        width: width_screen - 150,
+                                                        child: Text(
+                                                          value,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (String? value) {
-                                                  // This is called when the user selects an item.
-                                                  setState(() {
-                                                    departamento = value!;
-                                                  });
-                                                },
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (String? value) {
+                                                    // This is called when the user selects an item.
+                                                    setState(() {
+                                                      departamento = value!;
+                                                    });
+                                                  },
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 2.0),
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.greenAccent),
-                                          ),
-                                          onPressed: () {
-                                            search();
-                                          },
-                                          child: Text(
-                                            'Pesquisar',
-                                            style: GoogleFonts.acme(
-                                              textStyle:
-                                                  const TextStyle(fontSize: 30),
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                        padding:
+                                            const EdgeInsets.only(top: 2.0, bottom: 15),
+                                        child: (isRequestReady)
+                                            ? InkWell(
+                                                onTap: () {
+                                                  if(fimController.text == '' || inicioController == '') {
+                                                    ErrorDialog(context, "Preencher dada inicial e final para pesquisa.");
+                                                  } else {
+                                                    setState(() {
+                                                      isRequestReady = false;
+                                                    });
+                                                    search();
+                                                  }
+                                                },
+                                                child: Container(
+                                                  width: 150,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.greenAccent,
+                                                    borderRadius: BorderRadius.circular(30)
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 8.0),
+                                                          child: Text(
+                                                            'Pesquisar',
+                                                            style: GoogleFonts.actor(
+                                                              textStyle: const TextStyle(fontSize: 20),
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(30),
+                                                            color: Colors.black.withAlpha(50)
+                                                          ),
+                                                          child: const Icon(
+                                                            Icons.chevron_right_rounded, 
+                                                            size: 30, 
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                            )
+                                            : 
+                                            InkWell(
+                                                onTap: () {
+                                                  ErrorDialog(context, 'Aguarde o processamento.');
+                                                },
+                                                child: Container(
+                                                  width: 150,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.circular(30)
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 8.0),
+                                                          child: Text(
+                                                            'Aguarde',
+                                                            style: GoogleFonts.actor(
+                                                              textStyle: const TextStyle(fontSize: 20),
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                            )
                                       ),
                                     ],
-                                  ), // Inicio
+                                  ),
                                 ),
-                                (_isSearchReady)
-                                    ? (_showSearch)
-                                      ? SizedBox(
-                                        width: width_screen - 30,
-                                        height: 70,
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Text(
-                                                  'Saldo Inicial: $saldoInicial',
-                                                  style: GoogleFonts.acme(
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 23,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Colors.blue),
+                              ),
+                              (_isSearchReady)
+                                  ? (_showSearch)
+                                      ? Padding(
+                                        padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                                        child: Card(
+                                          elevation: 8,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            side: BorderSide(
+                                              color: Colors.black.withAlpha(20), // Border color
+                                              width: 1, // Border width
+                                            ),
+                                          ),
+                                          child: SizedBox(
+                                              width: width_screen - 30,
+                                              height: 80,
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(2.0),
+                                                    child: Text(
+                                                      'Saldo Inicial: $saldoInicial',
+                                                      style: GoogleFonts.actor(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 23,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.blue),
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                    ),
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                  softWrap: true,
-                                                ),
-                                              ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(2.0),
-                                              child: Text(
-                                                'Saldo Final: ${saldoInicial + saldoPeriodo}',
-                                                style: GoogleFonts.acme(
-                                                  textStyle: const TextStyle(
-                                                      fontSize: 23,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.blue),
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: true,
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(2.0),
+                                                    child: Text(
+                                                      'Saldo Final: ${saldoInicial + saldoPeriodo}',
+                                                      style: GoogleFonts.actor(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 23,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.blue),
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
                                         ),
                                       )
-                                      : const Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Center(
-                                              child: CircularProgressIndicator(),
-                                            ),
-                                          ],
-                                        )
-                                    : Container(),
-                                (_isSearchReady)
-                                    ? (_showSearch)
+                                      : Container()
+                                  : Container(),
+                              (_isSearchReady)
+                                  ? (_showSearch)
                                       ? SizedBox(
-                                          width: width_screen - 20,
+                                          width: width_screen - 30,
                                           height: 400,
                                           child: ListView(
-                                            physics: const NeverScrollableScrollPhysics(),
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
                                             controller: _listScrollController,
-                                            children: generateListBancoHorasCards(
+                                            children:
+                                                generateListBancoHorasCards(
                                               databaseSintetico:
                                                   databaseBancoSintetico,
                                               database: databaseBanco,
@@ -382,31 +670,35 @@ class _BancoHorasState extends State<BancoHoras> {
                                             ),
                                           ),
                                         )
-                                      : const Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: CircularProgressIndicator(),
+                                      : const Padding(
+                                        padding: EdgeInsets.only(top: 40.0),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            ],
                                           ),
-                                        ],
                                       )
-                                    : SizedBox(
-                                        width: width_screen - 150,
-                                        height: 200,
-                                        child: Text(
-                                          returnSearch,
-                                          style: GoogleFonts.acme(
-                                            textStyle: const TextStyle(
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.blue),
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
+                                  : SizedBox(
+                                      width: width_screen - 150,
+                                      height: 200,
+                                      child: Text(
+                                        returnSearch,
+                                        style: GoogleFonts.actor(
+                                          textStyle: const TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue),
                                         ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                              ],
-                            ),
-                          ],
+                                    ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -415,14 +707,17 @@ class _BancoHorasState extends State<BancoHoras> {
               ),
             ),
           )
-        : const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: CircularProgressIndicator(),
-              ),
-            ],
-          );
+        : const Padding(
+          padding: EdgeInsets.only(top: 40.0),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
+        );
   }
 
   void search() {
@@ -449,9 +744,11 @@ class _BancoHorasState extends State<BancoHoras> {
 
       if (firstName != null && lastName != null) {
         String matricula = '';
-        DateTime fimSaldo = DateTime(int.parse(inicioController.text.substring(6, 10)),
-            int.parse(inicioController.text.substring(3, 5)),
-            int.parse(inicioController.text.substring(0, 2))).subtract(const Duration(days: 1));
+        DateTime fimSaldo = DateTime(
+                int.parse(inicioController.text.substring(6, 10)),
+                int.parse(inicioController.text.substring(3, 5)),
+                int.parse(inicioController.text.substring(0, 2)))
+            .subtract(const Duration(days: 1));
         String buscaSaldo = fimSaldo.toString().substring(0, 4) +
             fimSaldo.toString().substring(5, 7) +
             fimSaldo.toString().substring(8, 10);
@@ -461,7 +758,7 @@ class _BancoHorasState extends State<BancoHoras> {
         String fim = fimController.text.substring(6, 10) +
             fimController.text.substring(3, 5) +
             fimController.text.substring(0, 2);
-        if(mounted){
+        if (mounted) {
           setState(() {
             _showSearch = false;
           });
@@ -512,6 +809,9 @@ class _BancoHorasState extends State<BancoHoras> {
                     });
                   });
                   setState(() {
+                    isRequestReady = true;
+                  });
+                  setState(() {
                     _showSearch = true;
                   });
                   break;
@@ -542,6 +842,9 @@ class _BancoHorasState extends State<BancoHoras> {
                         saldoInicial += spi010.pi_quant;
                       }
                       _showSearch = true;
+                      setState(() {
+                        isRequestReady = true;
+                      });
                     });
                   });
                 } else {
@@ -572,6 +875,9 @@ class _BancoHorasState extends State<BancoHoras> {
                           for (Spi010 spi010 in listSpi010) {
                             saldoInicial += spi010.pi_quant;
                           }
+                          setState(() {
+                            isRequestReady = true;
+                          });
                           _showSearch = true;
                         });
                       });
@@ -582,7 +888,7 @@ class _BancoHorasState extends State<BancoHoras> {
             });
           });
         } else if (group == '2') {
-          if(mounted){
+          if (mounted) {
             setState(() {
               _showSearch = false;
             });
@@ -613,6 +919,9 @@ class _BancoHorasState extends State<BancoHoras> {
                 for (Spi010 spi010 in listSpi010) {
                   saldoInicial += spi010.pi_quant;
                 }
+                setState(() {
+                  isRequestReady = true;
+                });
                 _showSearch = true;
               });
             });
@@ -642,12 +951,15 @@ class _BancoHorasState extends State<BancoHoras> {
                 for (Spi010 spi010 in listSpi010) {
                   saldoInicial += spi010.pi_quant;
                 }
+                setState(() {
+                  isRequestReady = true;
+                });
                 _showSearch = true;
               });
             });
           }
         } else if (group == '3') {
-          if(mounted){
+          if (mounted) {
             setState(() {
               _showSearch = false;
             });
@@ -677,6 +989,9 @@ class _BancoHorasState extends State<BancoHoras> {
               for (Spi010 spi010 in listSpi010) {
                 saldoInicial += spi010.pi_quant;
               }
+              setState(() {
+                isRequestReady = true;
+              });
               _showSearch = true;
             });
           });

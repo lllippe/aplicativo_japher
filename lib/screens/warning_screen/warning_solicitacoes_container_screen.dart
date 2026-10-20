@@ -41,7 +41,7 @@ class _SolicitacoesWarningScreenState extends State<SolicitacoesWarningScreen> {
                   'Ver períodos pendentes de aprovação',
                   overflow: TextOverflow.visible,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.acme(
+                  style: GoogleFonts.actor(
                     textStyle: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -63,9 +63,9 @@ class _SolicitacoesWarningScreenState extends State<SolicitacoesWarningScreen> {
           title: Text(
             'Nenhuma solicitação em aberto!',
             textAlign: TextAlign.center,
-            style: GoogleFonts.acme(
+            style: GoogleFonts.actor(
               textStyle: const TextStyle(
-                  fontSize: 23,
+                  fontSize: 18,
                   fontWeight: FontWeight.normal,
                   color: Colors.black),
             ),
@@ -79,9 +79,9 @@ class _SolicitacoesWarningScreenState extends State<SolicitacoesWarningScreen> {
             Text(
               'Nenhuma solicitação em aberto!',
               textAlign: TextAlign.center,
-              style: GoogleFonts.acme(
+              style: GoogleFonts.actor(
                 textStyle: const TextStyle(
-                    fontSize: 23,
+                    fontSize: 18,
                     fontWeight: FontWeight.normal,
                     color: Colors.black),
               ),

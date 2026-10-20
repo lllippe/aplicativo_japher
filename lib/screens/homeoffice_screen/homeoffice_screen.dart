@@ -51,14 +51,13 @@ class _HomeOfficeScreenState extends State<HomeOfficeScreen> {
         ? Scaffold(
             body: Scrollbar(
               controller: listScrollController,
-              thumbVisibility: true,
-              thickness: 10,
+              thickness: 6,
               child: (database.length > 0)
                 ? const HomeOfficeCard()
                 : ListTile(
                     title: Text(
                     'Nenhum colaborador cadastrado para trabalho presencial',
-                    style: GoogleFonts.acme(
+                    style: GoogleFonts.actor(
                       textStyle: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.normal,

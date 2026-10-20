@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:projeto_aucs/models/ferias.dart';
 import 'package:projeto_aucs/models/periodos.dart';
 import 'package:projeto_aucs/models/quem_esta_ferias.dart';
 import 'package:projeto_aucs/models/srh010.dart';
 import 'package:projeto_aucs/models/sze010.dart';
 import 'package:projeto_aucs/models/sze010_falta_dias.dart';
 import 'package:projeto_aucs/screens/add_screen/add_szh010_screen.dart';
+import 'package:projeto_aucs/screens/commom/error_dialog.dart';
+import 'package:projeto_aucs/screens/commom/explanation_dialog.dart';
 import 'package:projeto_aucs/screens/ferias_screen/feriasPeriodo_screen_list.dart';
 import 'package:projeto_aucs/services/ferias_service.dart';
 import 'package:projeto_aucs/services/periodo_service.dart';
@@ -72,28 +73,158 @@ class _FeriasState extends State<Ferias> {
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
-                      titleTextStyle: GoogleFonts.acme(
+                      automaticallyImplyLeading: false,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Icon(
+                              Icons.airplane_ticket_rounded,
+                              size: 30,
+                              color: Colors.black.withAlpha(130),
+                            ),
+                          ),
+                          const Text('Férias'),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 130.0),
+                            child: InkWell(
+                              onTap: () {
+                                explanationDialog(context, 
+                                'Como solicitar férias',
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 15.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.calendar_today,
+                                          size: 25,
+                                          color: Colors.black.withAlpha(130)),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 10.0),
+                                              child: Text('O ícone mostra a quantidade de dias que você possui em aberto para solicitar férias.',
+                                                overflow: TextOverflow.values.first
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(
+                                      thickness: 1,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15.0, bottom: 15),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.edit_calendar,
+                                          size: 25,
+                                          color: Colors.black.withAlpha(130)),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 10.0),
+                                              child: Text('O ícone mostra a quantidade de dias que você solicitou. É atualizado automaticamente ao selecionar a data inicial e final desejada.',
+                                                overflow: TextOverflow.values.first
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(
+                                      thickness: 1,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15.0),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                              color: Colors.greenAccent,
+                                              borderRadius: BorderRadius.circular(30)
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0),
+                                                    child: Text(
+                                                      'Solicitar',
+                                                      style: GoogleFonts.actor(
+                                                        textStyle: const TextStyle(fontSize: 20),
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(30),
+                                                      color: Colors.black.withAlpha(50)
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.chevron_right_rounded, 
+                                                      size: 30, 
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 10.0),
+                                              child: Text('Clique em Solicitar e aguarde o processamento.',
+                                                overflow: TextOverflow.values.first
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(30),
+                                  borderRadius: BorderRadius.circular(30)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.question_mark,
+                                    size: 20,
+                                    color: Colors.black.withAlpha(150)),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      titleTextStyle: GoogleFonts.actor(
                           textStyle: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 25,
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
                       )),
                       backgroundColor: Colors.greenAccent,
-                      title: const Text(
-                        'Férias',
-                        textAlign: TextAlign.center,
-                      ),
                       pinned: true,
                       floating: true,
                       bottom: TabBar(
-                        labelStyle: GoogleFonts.acme(
+                        labelStyle: GoogleFonts.actor(
                             textStyle: const TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 23,
                         )),
                         labelColor: Colors.black,
                         indicatorColor: Colors.black,
-                        unselectedLabelStyle: GoogleFonts.acme(
+                        unselectedLabelStyle: GoogleFonts.actor(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 18,
@@ -128,8 +259,7 @@ class _FeriasState extends State<Ferias> {
                       (sze010 != null)
                           ? Scrollbar(
                               controller: _controller,
-                              thumbVisibility: true,
-                              thickness: 10,
+                              thickness: 6,
                               radius: const Radius.circular(15),
                               child: AddSzh010Screen(
                                 sze010: sze010!,
@@ -138,7 +268,7 @@ class _FeriasState extends State<Ferias> {
                             )
                           : Text(
                             'Não há dias em aberto para fazer solicitação.',
-                            style: GoogleFonts.acme(
+                            style: GoogleFonts.actor(
                                 textStyle: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.normal,
@@ -202,7 +332,7 @@ class _FeriasState extends State<Ferias> {
                     child: Text(
                       'Nome',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.acme(
+                      style: GoogleFonts.actor(
                         textStyle: const TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
@@ -218,7 +348,7 @@ class _FeriasState extends State<Ferias> {
                     child: Text(
                       'Inicio',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.acme(
+                      style: GoogleFonts.actor(
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -233,7 +363,7 @@ class _FeriasState extends State<Ferias> {
                     child: Text(
                       'Fim',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.acme(
+                      style: GoogleFonts.actor(
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -256,7 +386,7 @@ class _FeriasState extends State<Ferias> {
                       child: Text(
                         value.ze_nome.trim(),
                         textAlign: TextAlign.start,
-                        style: GoogleFonts.acme(
+                        style: GoogleFonts.actor(
                           textStyle: const TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
@@ -274,7 +404,7 @@ class _FeriasState extends State<Ferias> {
                             '${value.rh_dataini.substring(4, 6)}/'
                             '${value.rh_dataini.substring(0, 4)}',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.acme(
+                        style: GoogleFonts.actor(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -291,7 +421,7 @@ class _FeriasState extends State<Ferias> {
                             '${value.rh_datafim.substring(4, 6)}/'
                             '${value.rh_datafim.substring(0, 4)}',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.acme(
+                        style: GoogleFonts.actor(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -389,7 +519,7 @@ class _FeriasState extends State<Ferias> {
                               child: Text(
                                 value.rh_dataini,
                                 textAlign: TextAlign.start,
-                                style: GoogleFonts.acme(
+                                style: GoogleFonts.actor(
                                   textStyle: const TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.bold,
@@ -405,7 +535,7 @@ class _FeriasState extends State<Ferias> {
                               child: Text(
                                 value.rh_datafim,
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.acme(
+                                style: GoogleFonts.actor(
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -420,7 +550,7 @@ class _FeriasState extends State<Ferias> {
                               child: Text(
                                 '${value.rh_dferias}',
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.acme(
+                                style: GoogleFonts.actor(
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,

@@ -9,7 +9,8 @@ List<ContainerWarningScreen> generateWarningScreen({
   List<ContainerWarningScreen> list = [];
   DateTime currentDay = DateTime.now();
   currentDay.month;
-  //Preenche os espaços que possuem entradas no banco
+  int count = 0;
+  int size = database.length;
   database.forEach(
         (key, value) {
       if (value.ze_niver != "        ") {
@@ -19,10 +20,12 @@ List<ContainerWarningScreen> generateWarningScreen({
               userId: userId,
               aniversarios: value,
               refreshFunction: refreshFunction,
+              lastLine: (count == size)? true : false,
             ),
           );
         }
       }
+      count++;
     },
   );
   return list;

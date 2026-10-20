@@ -32,13 +32,12 @@ class _FeriasWarningScreenState extends State<FeriasWarningScreen> {
           children: [
             Expanded(
               child: Text(
-                'Marcar os ${widget.faltaDias?.ze_saldfer.round()} dias restantes '
-                    'o quanto antes.',
-                overflow: TextOverflow.visible,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.acme(
+                'Marcar os ${widget.faltaDias?.ze_saldfer.round()} dias restantes o quanto antes.',
+                overflow: TextOverflow.values.first,
+                textAlign: TextAlign.start,
+                style: GoogleFonts.actor(
                   textStyle: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.red),
                 ),
@@ -54,14 +53,17 @@ class _FeriasWarningScreenState extends State<FeriasWarningScreen> {
         child: ListTile(
           title: Row(
             children: [
-              Text(
-                'Todo o período foi agendado!',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.acme(
-                  textStyle: const TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
+              Expanded(
+                child: Text(
+                  'Todo o período foi agendado!',
+                  overflow: TextOverflow.values.first,
+                  textAlign: TextAlign.start,
+                  style: GoogleFonts.actor(
+                    textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black),
+                  ),
                 ),
               ),
             ],

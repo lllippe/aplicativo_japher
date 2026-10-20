@@ -18,13 +18,13 @@ class _HomeOfficeTileCardState extends State<HomeOfficeTileCard> {
   Widget build(BuildContext context) {
     if (widget.name!.trim() != '') {
       return ListTile(
-        leading: const Icon(
+        leading: Icon(
           Icons.emoji_transportation_rounded,
-          color: Colors.black,
+          color: Colors.black.withAlpha(80),
         ),
         title: Text(
           widget.name!,
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
@@ -37,7 +37,7 @@ class _HomeOfficeTileCardState extends State<HomeOfficeTileCard> {
       return ListTile(
         title: Text(
           'Nenhum HomeOffice cadastrado',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,

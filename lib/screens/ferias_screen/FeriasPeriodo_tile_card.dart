@@ -27,7 +27,7 @@ class _FeriasPeriodoTileCardState extends State<FeriasPeriodoTileCard> {
           '${widget.srh010!.rh_datafim.substring(4, 6)}/'
           '${widget.srh010!.rh_datafim.substring(0, 4)} - '
           '${widget.srh010!.rh_dferias.round()} dias',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
@@ -40,7 +40,7 @@ class _FeriasPeriodoTileCardState extends State<FeriasPeriodoTileCard> {
       return ListTile(
         title: Text(
           'Nenhum Período Cadastrado',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,

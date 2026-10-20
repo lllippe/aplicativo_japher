@@ -10,6 +10,7 @@ import 'package:projeto_aucs/services/sqb010_service.dart';
 import 'package:projeto_aucs/services/sze010_service.dart';
 import 'package:projeto_aucs/validations/colaboradorValidation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 const List<String> active = <String>['Sim', 'Não'];
 
@@ -62,6 +63,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
   String feriasPagas = active.first;
   var departamento;
   String userId = '';
+  bool isRequestReady = true;
 
   @override
   void initState() {
@@ -77,18 +79,17 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
     zeDeptoController.text = widget.sze010.ze_depto;
     (widget.isEditing)
         ? (widget.sze010.ze_niver.trim().isNotEmpty)
-          ? zeNiverController.text = DateFormat('dd/MM/yyyy')
-              .format(DateTime.parse(widget.sze010.ze_niver))
-          : zeNiverController.text =
-            DateFormat('dd/MM/yyyy').format(initialDate)
-        : zeNiverController.text =
-          DateFormat('dd/MM/yyyy').format(initialDate);
+            ? zeNiverController.text = DateFormat('dd/MM/yyyy')
+                .format(DateTime.parse(widget.sze010.ze_niver))
+            : zeNiverController.text =
+                DateFormat('dd/MM/yyyy').format(initialDate)
+        : zeNiverController.text = DateFormat('dd/MM/yyyy').format(initialDate);
     (widget.isEditing)
         ? (widget.sze010.ze_conveni.trim().isNotEmpty)
-          ? zeConveniController.text = DateFormat('dd/MM/yyyy')
-              .format(DateTime.parse(widget.sze010.ze_conveni))
-          : zeConveniController.text =
-              DateFormat('dd/MM/yyyy').format(initialDate)
+            ? zeConveniController.text = DateFormat('dd/MM/yyyy')
+                .format(DateTime.parse(widget.sze010.ze_conveni))
+            : zeConveniController.text =
+                DateFormat('dd/MM/yyyy').format(initialDate)
         : zeConveniController.text =
             DateFormat('dd/MM/yyyy').format(initialDate);
     (widget.isEditing)
@@ -109,15 +110,15 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.greenAccent,
+        backgroundColor: Colors.greenAccent,
+        foregroundColor: Colors.black,
         title: (widget.isEditing)
             ? const Text('Editar Colaborador')
             : const Text('Criar Colaborador'),
         titleTextStyle: const TextStyle(
-            color: Colors.greenAccent,
+            color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.bold),
-        backgroundColor: Colors.white70,
         actions: [
           IconButton(
             onPressed: () {
@@ -135,7 +136,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                   children: [
                     TextField(
                       controller: zeNomeController,
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 16),
                       decoration: const InputDecoration(
                         labelText: "Nome: ",
                       ),
@@ -144,7 +145,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: TextField(
                           controller: zeAdmissaController,
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 16),
                           decoration: const InputDecoration(
                             labelText: "Data Admissão: ",
                           ),
@@ -154,7 +155,8 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.parse('1900-01-01'),
-                              lastDate: DateTime.now().add(const Duration(days: 90)),
+                              lastDate:
+                                  DateTime.now().add(const Duration(days: 90)),
                             );
 
                             if (pickedDate != null) {
@@ -183,7 +185,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: TextField(
                           controller: zeFperaqController,
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 16),
                           decoration: const InputDecoration(
                             labelText: "Periodo Aquisitivo: ",
                           ),
@@ -193,7 +195,8 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.parse('1900-01-01'),
-                              lastDate: DateTime.now().add(const Duration(days: 90)),
+                              lastDate:
+                                  DateTime.now().add(const Duration(days: 90)),
                             );
 
                             if (pickedDate != null) {
@@ -222,7 +225,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: TextField(
                           controller: zeNiverController,
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 16),
                           decoration: const InputDecoration(
                             labelText: "Nascimento: ",
                           ),
@@ -232,12 +235,13 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.parse('1900-01-01'),
-                              lastDate: DateTime.now().add(const Duration(days: 90)),
+                              lastDate:
+                                  DateTime.now().add(const Duration(days: 90)),
                             );
 
                             if (pickedDateNiver != null) {
-                              String formattedDate =
-                              DateFormat('dd/MM/yyyy').format(pickedDateNiver!);
+                              String formattedDate = DateFormat('dd/MM/yyyy')
+                                  .format(pickedDateNiver!);
 
                               setState(() {
                                 zeNiverController.text =
@@ -245,13 +249,12 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               });
                             } else {
                               String formattedDate =
-                              DateFormat('dd/MM/yyyy').format(initialDate);
+                                  DateFormat('dd/MM/yyyy').format(initialDate);
 
                               setState(() {
                                 zeNiverController.text = (widget.isEditing)
                                     ? DateFormat('dd/MM/yyyy').format(
-                                    DateTime.parse(
-                                        widget.sze010.ze_niver))
+                                        DateTime.parse(widget.sze010.ze_niver))
                                     : formattedDate; //set foratted date to TextField value.
                               });
                             }
@@ -261,7 +264,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: TextField(
                           controller: zeConveniController,
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 16),
                           decoration: const InputDecoration(
                             labelText: "Venc. Convênio: ",
                           ),
@@ -271,12 +274,13 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime.parse('1900-01-01'),
-                              lastDate: DateTime.now().add(const Duration(days: 90)),
+                              lastDate:
+                                  DateTime.now().add(const Duration(days: 90)),
                             );
 
                             if (pickedDateConv != null) {
-                              String formattedDate =
-                              DateFormat('dd/MM/yyyy').format(pickedDateConv!);
+                              String formattedDate = DateFormat('dd/MM/yyyy')
+                                  .format(pickedDateConv!);
 
                               setState(() {
                                 zeConveniController.text =
@@ -284,13 +288,13 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               });
                             } else {
                               String formattedDate =
-                              DateFormat('dd/MM/yyyy').format(initialDate);
+                                  DateFormat('dd/MM/yyyy').format(initialDate);
 
                               setState(() {
                                 zeConveniController.text = (widget.isEditing)
                                     ? DateFormat('dd/MM/yyyy').format(
-                                    DateTime.parse(
-                                        widget.sze010.ze_conveni))
+                                        DateTime.parse(
+                                            widget.sze010.ze_conveni))
                                     : formattedDate; //set foratted date to TextField value.
                               });
                             }
@@ -304,7 +308,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             padding: EdgeInsets.only(left: 2.0),
                             child: Text(
                               'Férias Vencidas?',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
@@ -313,10 +317,10 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               value: (widget.sze010.ze_fervenc == '2')
                                   ? feriasVencidas = 'Não'
                                   : feriasVencidas,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward, size: 20,),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: Colors.deepPurple, fontSize: 20),
+                                  color: Colors.black, fontSize: 14),
                               items: active.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
@@ -343,7 +347,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             padding: EdgeInsets.only(left: 2.0),
                             child: Text(
                               'Direito Férias?',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
@@ -352,10 +356,10 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               value: (widget.sze010.ze_dirferi == '2')
                                   ? direitoFerias = 'Não'
                                   : direitoFerias,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward, size: 20),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: Colors.deepPurple, fontSize: 20),
+                                  color: Colors.black, fontSize: 14),
                               items: active.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
@@ -382,7 +386,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             padding: EdgeInsets.only(left: 2.0),
                             child: Text(
                               'Férias Agendadas?',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
@@ -391,10 +395,10 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               value: (widget.sze010.ze_feragen == '2')
                                   ? feriasAgendadas = 'Não'
                                   : feriasAgendadas,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward, size: 20),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: Colors.deepPurple, fontSize: 20),
+                                  color: Colors.black, fontSize: 14),
                               items: active.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
@@ -421,7 +425,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             padding: EdgeInsets.only(left: 2.0),
                             child: Text(
                               'Antecipação Férias?',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
@@ -430,10 +434,10 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               value: (widget.sze010.ze_antefer == '2')
                                   ? antecipFerias = 'Não'
                                   : antecipFerias,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward, size: 20),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: Colors.deepPurple, fontSize: 20),
+                                  color: Colors.black, fontSize: 14),
                               items: active.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
@@ -460,7 +464,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             padding: EdgeInsets.only(left: 2.0),
                             child: Text(
                               'Férias Pagas?',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
@@ -469,10 +473,10 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                               value: (widget.sze010.ze_ferpg == '2')
                                   ? feriasPagas = 'Não'
                                   : feriasPagas,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward, size: 20),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: Colors.deepPurple, fontSize: 20),
+                                  color: Colors.black, fontSize: 14),
                               items: active.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
@@ -499,17 +503,17 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             padding: EdgeInsets.only(left: 2.0),
                             child: Text(
                               'Departamento?',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 4.0),
                             child: DropdownButton<String>(
                               value: departamento,
-                              icon: const Icon(Icons.arrow_downward),
+                              icon: const Icon(Icons.arrow_downward, size: 20),
                               elevation: 16,
                               style: const TextStyle(
-                                  color: Colors.deepPurple, fontSize: 16),
+                                  color: Colors.black, fontSize: 14),
                               items: depto.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
@@ -528,14 +532,81 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                         ],
                       ),
                     ), // departamento
-                    ElevatedButton(
-                      onPressed: () {
-                        registerCampaing(context);
-                      },
-                      child: (widget.isEditing)
-                          ? const Text('Editar Colaborador')
-                          : const Text('Criar Colaborador'),
-                    )
+                    (isRequestReady)
+                        ? InkWell(
+                                onTap: () {
+                                    setState(() {
+                                      isRequestReady = false;
+                                    });
+                                    registerCampaing(context);
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      color: Colors.greenAccent,
+                                      borderRadius: BorderRadius.circular(30)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text('Editar',
+                                                style: GoogleFonts.actor(
+                                                  textStyle: const TextStyle(fontSize: 20),
+                                                  color: Colors.black,
+                                                ),
+                                              )
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(30),
+                                              color: Colors.black.withAlpha(50)
+                                            ),
+                                            child: const Icon(
+                                              Icons.chevron_right_rounded, 
+                                              size: 30, 
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              )
+                        : InkWell(
+                            onTap: () {
+                                ErrorDialog(
+                                    context, "Aguarde o processamento.");
+                              },
+                              child: Container(
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(30)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          'Aguarde',
+                                          style: GoogleFonts.actor(
+                                            textStyle: const TextStyle(fontSize: 20),
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ),
                   ],
                 ),
               ),
@@ -546,16 +617,16 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                 children: [
                   TextField(
                     controller: zeNomeController,
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 16),
                     decoration: const InputDecoration(
                       labelText: "Nome: ",
                     ),
-                    onSubmitted: (value){
-                      if (validation.searchUniqueName(zeNomeController.text)){
+                    onSubmitted: (value) {
+                      if (validation.searchUniqueName(zeNomeController.text)) {
                         ErrorDialog(
                             context,
                             'Já existe colaborador cadastrado com esse nome, '
-                                'favor verificar!');
+                            'favor verificar!');
                         nameValidation = true;
                         zeNomeController.text = '';
                       } else {
@@ -567,7 +638,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: TextField(
                         controller: zeAdmissaController,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           labelText: "Data Admissão: ",
                         ),
@@ -577,7 +648,8 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime.parse('1900-01-01'),
-                            lastDate: DateTime.now().add(const Duration(days: 90)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 90)),
                           );
 
                           if (pickedDate != null) {
@@ -605,7 +677,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: TextField(
                         controller: zeFperaqController,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           labelText: "Periodo Aquisitivo: ",
                         ),
@@ -615,7 +687,8 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime.parse('1900-01-01'),
-                            lastDate: DateTime.now().add(const Duration(days: 90)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 90)),
                           );
 
                           if (pickedDate != null) {
@@ -643,7 +716,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: TextField(
                         controller: zeNiverController,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 16),
                         decoration: const InputDecoration(
                           labelText: "Nascimento: ",
                         ),
@@ -653,12 +726,13 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime.parse('1900-01-01'),
-                            lastDate: DateTime.now().add(const Duration(days: 90)),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 90)),
                           );
 
                           if (pickedDateNiver != null) {
-                            String formattedDate =
-                            DateFormat('dd/MM/yyyy').format(pickedDateNiver!);
+                            String formattedDate = DateFormat('dd/MM/yyyy')
+                                .format(pickedDateNiver!);
 
                             setState(() {
                               zeNiverController.text =
@@ -666,13 +740,12 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             });
                           } else {
                             String formattedDate =
-                            DateFormat('dd/MM/yyyy').format(initialDate);
+                                DateFormat('dd/MM/yyyy').format(initialDate);
 
                             setState(() {
                               zeNiverController.text = (widget.isEditing)
                                   ? DateFormat('dd/MM/yyyy').format(
-                                  DateTime.parse(
-                                      widget.sze010.ze_niver))
+                                      DateTime.parse(widget.sze010.ze_niver))
                                   : formattedDate; //set foratted date to TextField value.
                             });
                           }
@@ -686,7 +759,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                           padding: EdgeInsets.only(left: 2.0),
                           child: Text(
                             'Departamento?',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                         Padding(
@@ -696,7 +769,7 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                             icon: const Icon(Icons.arrow_downward),
                             elevation: 16,
                             style: const TextStyle(
-                                color: Colors.deepPurple, fontSize: 16),
+                                color: Colors.black, fontSize: 14),
                             items: depto
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
@@ -714,20 +787,84 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
                         ),
                       ],
                     ),
-                  ), // Departamento
-                  ElevatedButton(
-                    onPressed: () {
-                      (nameValidation)
-                      ? ErrorDialog(
-                         context,
-                         'Existem erros que impedem o cadastro do Colaborador, '
-                             'favor verificar!')
-                      : registerCampaing(context);
-                    },
-                    child: (widget.isEditing)
-                        ? const Text('Editar Colaborador')
-                        : const Text('Criar Colaborador'),
+                  ),
+                  (isRequestReady)
+                  ? InkWell(
+                    onTap: () {
+                        (nameValidation)
+                        ? ErrorDialog(
+                            context,
+                            'Existem erros que impedem o cadastro do Colaborador, '
+                            'favor verificar!')
+                        : registerCampaing(context);
+                      },
+                      child: Container(
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: Colors.greenAccent,
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text('Criar',
+                                    style: GoogleFonts.actor(
+                                      textStyle: const TextStyle(fontSize: 20),
+                                      color: Colors.black,
+                                    ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.black.withAlpha(50)
+                                ),
+                                child: const Icon(
+                                  Icons.chevron_right_rounded, 
+                                  size: 30, 
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   )
+                  : InkWell(
+                            onTap: () {
+                                ErrorDialog(
+                                    context, "Aguarde o processamento.");
+                              },
+                              child: Container(
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(30)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          'Aguarde',
+                                          style: GoogleFonts.actor(
+                                            textStyle: const TextStyle(fontSize: 20),
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ),
                 ],
               ),
             ),
@@ -750,7 +887,6 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
     Sze010Service sze010Service = Sze010Service();
 
     SharedPreferences.getInstance().then((prefs) {
-
       if (widget.isEditing) {
         String deptoConvert = '';
 
@@ -791,13 +927,22 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
             .edit(widget.sze010.r_e_c_n_o_field, internalSze010)
             .then((value) {
           if (value) {
+            setState(() {
+              isRequestReady = true;
+            });
             Navigator.pop(context, DisposeStatus.success);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Sze010Screen(isloading: true,)),
+              MaterialPageRoute(
+                  builder: (context) => const Sze010Screen(
+                        isloading: true,
+                      )),
             );
             return SuccessDialog(context, 'Colaborador Alterado com Sucesso!');
           } else {
+            setState(() {
+              isRequestReady = true;
+            });
             Navigator.pop(context, DisposeStatus.error);
             return ErrorDialog(
                 context, 'Erro na requisição, tente mais tarde!');
@@ -838,10 +983,16 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
 
         sze010Service.register(internalSze010).then((value) {
           if (value) {
+            setState(() {
+              isRequestReady = true;
+            });
             Navigator.pop(context, DisposeStatus.success);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Sze010Screen(isloading:true,)),
+              MaterialPageRoute(
+                  builder: (context) => const Sze010Screen(
+                        isloading: true,
+                      )),
             );
             return SuccessDialog(
                 context, 'Colaborador Cadastrado com Sucesso!');
@@ -862,22 +1013,21 @@ class _AddSze010ScreenState extends State<AddSze010Screen> {
       String dptoSze = '';
 
       if (firstName != null && lastName != null) {
-      _sqb010service.getAll().then((List<Sqb010> listSqb010) {
-        setState(() {
-          for (Sqb010 sqb010 in listSqb010) {
-            depto.add(sqb010.qb_descric);
-            database[sqb010.qb_descric] = sqb010.qb_depto;
-            if (widget.sze010.ze_depto == sqb010.qb_depto.substring(0, 1)) {
-              dptoSze = sqb010.qb_descric;
+        _sqb010service.getAll().then((List<Sqb010> listSqb010) {
+          setState(() {
+            for (Sqb010 sqb010 in listSqb010) {
+              depto.add(sqb010.qb_descric);
+              database[sqb010.qb_descric] = sqb010.qb_depto;
+              if (widget.sze010.ze_depto == sqb010.qb_depto.substring(0, 1)) {
+                dptoSze = sqb010.qb_descric;
+              }
             }
-          }
 
-          (widget.isEditing)
-              ? departamento = dptoSze
-              : departamento = depto.first;
-
+            (widget.isEditing)
+                ? departamento = dptoSze
+                : departamento = depto.first;
+          });
         });
-      });
       } else {
         Navigator.pushReplacementNamed(context, 'login');
       }

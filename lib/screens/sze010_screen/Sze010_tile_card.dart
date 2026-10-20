@@ -22,22 +22,43 @@ class _Sze010TileCardState extends State<Sze010TileCard> {
   Widget build(BuildContext context) {
     if (widget.sze010 != null) {
       return ListTile(
-          title: Text(
-            widget.sze010!.ze_nome.trim(),
-            style: GoogleFonts.acme(
-              textStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                color: Colors.black,
+          title: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    callAddSze010Screen(context, sze010: widget.sze010);
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 20),
+                  child: Icon(
+                    Icons.edit,
+                    size: 25,
+                    color: Colors.black.withAlpha(80),
+                  ),
+                ),
               ),
-            ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    callAddSze010Screen(context, sze010: widget.sze010);
+                  });
+                },
+                child: Text(
+                  widget.sze010!.ze_nome.trim(),
+                  style: GoogleFonts.actor(
+                    textStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          trailing: const Icon(Icons.edit),
-          onTap: () {
-            setState(() {
-              callAddSze010Screen(context, sze010: widget.sze010);
-            });
-          });
+        );
     } else {
       return const ListTile(
         title: Text('Nenhum colaborador Cadastrado'),

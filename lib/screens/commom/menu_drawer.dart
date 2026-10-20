@@ -44,7 +44,10 @@ ListView menuDrawer(BuildContext context) {
     ? ListView(
     children: [
       ListTile(
-        leading: const Icon(Icons.home),
+        leading: Icon(
+          Icons.home,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text('Home'),
         onTap: () {
           returnHome();
@@ -52,7 +55,10 @@ ListView menuDrawer(BuildContext context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.airplane_ticket_rounded),
+        leading: Icon(
+          Icons.airplane_ticket_rounded,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text('Manutenção - Férias'),
         onTap: () {
           Navigator.push(
@@ -62,7 +68,10 @@ ListView menuDrawer(BuildContext context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.calendar_month),
+        leading: Icon(
+          Icons.calendar_month,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text('Manutenção - Ponto Eletrônico'),
         onTap: () {
           Navigator.push(
@@ -72,7 +81,10 @@ ListView menuDrawer(BuildContext context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.account_circle),
+        leading: Icon(
+          Icons.account_circle,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text('Manutenção - Colaborador'),
         onTap: () {
           Navigator.push(
@@ -82,7 +94,10 @@ ListView menuDrawer(BuildContext context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.door_front_door_outlined),
+        leading: Icon(
+          Icons.door_front_door_outlined,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text('Manutenção - Solicitações'),
         onTap: () {
           Navigator.push(
@@ -92,7 +107,10 @@ ListView menuDrawer(BuildContext context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.logout),
+        leading: Icon(
+          Icons.logout,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text("Sair"),
         onTap: () {
           logout(context);
@@ -103,7 +121,10 @@ ListView menuDrawer(BuildContext context) {
     : ListView(
     children: [
       ListTile(
-        leading: const Icon(Icons.home),
+        leading: Icon(
+          Icons.home,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text('Home'),
         onTap: () {
           returnHome();
@@ -111,7 +132,10 @@ ListView menuDrawer(BuildContext context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.logout),
+        leading: Icon(
+          Icons.logout,
+          color: Colors.black.withAlpha(80),
+        ),
         title: const Text("Sair"),
         onTap: () {
           logout(context);

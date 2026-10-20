@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projeto_aucs/models/sqb010.dart';
 import 'package:projeto_aucs/models/sze010.dart';
 import 'package:projeto_aucs/screens/commom/confirmation_dialog.dart';
@@ -54,14 +55,17 @@ class _Sze010CardState extends State<Sze010Card> {
       dividerColor: Colors.grey,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          this.isExpanded = !isExpanded;
+          this.isExpanded = isExpanded;
         });
       },
       children: [
         ExpansionPanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
-              title: Text('${widget.sqb010!.qb_descric.trim()}  -  $soma Colaboradores'),
+              title: Text('${widget.sqb010!.qb_descric.trim()}  -  $soma Colaboradores',
+              style: GoogleFonts.lato(
+                fontSize: 14
+              ),),
             );
           },
           body: SizedBox(

@@ -55,6 +55,7 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
   String returnRegister = '';
   double hour = 0.0;
   String day = '';
+  bool isRequestReady = true;
 
   @override
   void initState() {
@@ -73,122 +74,196 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
               padding: const EdgeInsets.all(12),
               child: SingleChildScrollView(
                 controller: _controller,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 2.0),
-                            child: Text(
-                              'Colaborador',
-                              style: TextStyle(fontSize: 20),
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(
+                      color: Colors.black.withAlpha(20), // Border color
+                      width: 1, // Border width
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 2.0),
+                              child: Icon(
+                                Icons.person,
+                                size: 25,
+                                color: Colors.black.withAlpha(80),
+                              )
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: DropdownButton<String>(
-                              value: departamento,
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              style: const TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Colors.deepPurple,
-                                  fontSize: 16),
-                              items: name.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: SizedBox(
-                                    width: width_screen - 200,
-                                    child: Text(
-                                      value,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: SizedBox(
+                                width: width_screen - 120,
+                                child: DropdownButton<String>(
+                                  value: departamento,
+                                  icon: const Icon(Icons.arrow_downward),
+                                  elevation: 16,
+                                  style: const TextStyle(
                                       overflow: TextOverflow.ellipsis,
+                                      color: Colors.black,
+                                      fontSize: 16),
+                                  items: name.map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: SizedBox(
+                                        width: width_screen - 150,
+                                        child: Text(
+                                          value,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    // This is called when the user selects an item.
+                                    setState(() {
+                                      departamento = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AnalogClock(
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(width: 2.0, color: Colors.black),
+                                  color: Colors.black,
+                                  shape: BoxShape.circle),
+                              width: width_screen - 170,
+                              height: 230,
+                              isLive: true,
+                              hourHandColor: Colors.white70,
+                              minuteHandColor: Colors.white,
+                              secondHandColor: Colors.yellow,
+                              showSecondHand: true,
+                              numberColor: Colors.white,
+                              showNumbers: true,
+                              showAllNumbers: true,
+                              textScaleFactor: 1.8,
+                              showTicks: true,
+                              showDigitalClock: true,
+                              digitalClockColor: Colors.orange,
+                              datetime: time,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25.0, bottom: 30),
+                        child: (isRequestReady)
+                            ? InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isRequestReady = false;
+                                  });
+                                  register();
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      color: Colors.greenAccent,
+                                      borderRadius: BorderRadius.circular(30)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              'Registrar',
+                                              style: GoogleFonts.actor(
+                                                textStyle: const TextStyle(fontSize: 20),
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(30),
+                                              color: Colors.black.withAlpha(50)
+                                            ),
+                                            child: const Icon(
+                                              Icons.chevron_right_rounded, 
+                                              size: 30, 
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                );
-                              }).toList(),
-                              onChanged: (String? value) {
-                                // This is called when the user selects an item.
-                                setState(() {
-                                  departamento = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnalogClock(
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 2.0, color: Colors.black),
-                                color: Colors.black,
-                                shape: BoxShape.circle),
-                            width: width_screen - 170,
-                            height: 230,
-                            isLive: true,
-                            hourHandColor: Colors.white70,
-                            minuteHandColor: Colors.white,
-                            secondHandColor: Colors.yellow,
-                            showSecondHand: true,
-                            numberColor: Colors.white,
-                            showNumbers: true,
-                            showAllNumbers: true,
-                            textScaleFactor: 1.8,
-                            showTicks: true,
-                            showDigitalClock: true,
-                            digitalClockColor: Colors.orange,
-                            datetime: time,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25.0, bottom: 30),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.greenAccent),
-                        ),
-                        onPressed: () {
-                          register();
-                        },
-                        child: Text(
-                          'Registrar',
-                          style: GoogleFonts.acme(
-                            textStyle: const TextStyle(fontSize: 30),
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ), // Button Solicitar
-                    const Divider(
-                      height: 2,
-                      thickness: 3,
-                    ),
-                    (_isRegisterReady)
-                    ? SizedBox(
-                      width: width_screen,
-                      height: 200,
-                      child: Text(
-                        returnRegister,
-                        style: GoogleFonts.acme(
-                          textStyle: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                    : Container(),
-                  ],
+                              )
+                            : InkWell(
+                                onTap: () { 
+                                    ErrorDialog(context, "Aguarde processamento.");
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(30)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text(
+                                              'Aguarde',
+                                              style: GoogleFonts.actor(
+                                                textStyle: const TextStyle(fontSize: 20),
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              )
+                      ), // Button Solicitar
+                      (_isRegisterReady)
+                          ? Center(
+                            child: SizedBox(
+                                width: width_screen - 20,
+                                height: 200,
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  returnRegister,
+                                  style: GoogleFonts.actor(
+                                    textStyle: const TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                          )
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -208,27 +283,31 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
   }
 
   void register() {
-    _worldtimeService.getAll().then((List<String> listWorldTime){
-      for (String worldtime in listWorldTime){
-        if(mounted){
+    _worldtimeService.getAll().then((List<String> listWorldTime) {
+      for (String worldtime in listWorldTime) {
+        if (mounted) {
           setState(() {
-            time = DateTime(int.parse(worldtime.substring(0,4)), int.parse(worldtime.substring(5,7)),
-              int.parse(worldtime.substring(8,10)), int.parse(worldtime.substring(11,13)),
-              int.parse(worldtime.substring(14,16)), int.parse(worldtime.substring(17,19)));
+            time = DateTime(
+                int.parse(worldtime.substring(0, 4)),
+                int.parse(worldtime.substring(5, 7)),
+                int.parse(worldtime.substring(8, 10)),
+                int.parse(worldtime.substring(11, 13)),
+                int.parse(worldtime.substring(14, 16)),
+                int.parse(worldtime.substring(17, 19)));
           });
         }
       }
     });
 
     validateRegister(context);
-
   }
 
-  void validateRegister(BuildContext context){
-    if(validation.availableTime(time)){
-      ErrorDialog(context,
-          'Colaborador sem autorização para fazer hora extra.');
+  void validateRegister(BuildContext context) {
+    if (validation.availableTime(time)) {
+      ErrorDialog(
+          context, 'Colaborador sem autorização para fazer hora extra.');
       setState(() {
+        isRequestReady = true;
         validateTime = true;
       });
     } else {
@@ -237,10 +316,11 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
       });
     }
 
-    if(validation.dayHoliday(time)){
+    if (validation.dayHoliday(time)) {
       ErrorDialog(context,
           'Colaborador sem autorização para fazer hora extra no feriado.');
       setState(() {
+        isRequestReady = true;
         validateHoliday = true;
       });
     } else {
@@ -253,39 +333,38 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
       validateVacation = false;
     });
     databaseVacation.forEach((key, value) {
-      if(value.rh_dataini != '        ' && value.rh_datafim != '        ') {
-        DateTime dateInitialPeriod = DateTime(int.parse(value.rh_dataini.substring(0, 4)),
+      if (value.rh_dataini != '        ' && value.rh_datafim != '        ') {
+        DateTime dateInitialPeriod = DateTime(
+            int.parse(value.rh_dataini.substring(0, 4)),
             int.parse(value.rh_dataini.substring(4, 6)),
             int.parse(value.rh_dataini.substring(6, 8)));
-        DateTime dateFinalPeriod = DateTime(int.parse(value.rh_datafim.substring(0, 4)),
+        DateTime dateFinalPeriod = DateTime(
+            int.parse(value.rh_datafim.substring(0, 4)),
             int.parse(value.rh_datafim.substring(4, 6)),
             int.parse(value.rh_datafim.substring(6, 8)));
-        if ((time.isAfter(dateInitialPeriod)
-            && time.isBefore(dateFinalPeriod)) ||
+        if ((time.isAfter(dateInitialPeriod) &&
+                time.isBefore(dateFinalPeriod)) ||
             (time.isAtSameMomentAs(dateInitialPeriod) ||
                 time.isAtSameMomentAs(dateFinalPeriod))) {
           setState(() {
             validateVacation = true;
+            isRequestReady = true;
           });
-          ErrorDialog(context,
-              'Colaborador em férias não pode registrar ponto.');
+          ErrorDialog(
+              context, 'Colaborador em férias não pode registrar ponto.');
         }
       }
     });
 
-    if(validateTime || validateVacation){
-
+    if (validateTime || validateVacation) {
     } else {
       setState(() {
         _isRegisterReady = true;
-        returnRegister = 'Registro feito.\nData: ${time.day}/${time.month}/${time.year}\n'
+        returnRegister =
+            'Registro feito.\nData: ${time.day}/${time.month}/${time.year}\n'
             'Horário: ${time.hour}:'
-            '${(time.minute.toString().length == 1)
-                ? time.minute.toString().padLeft(2,'0')
-                : time.minute}:'
-            '${(time.second.toString().length == 1)
-                ? time.second.toString().padLeft(2,'0')
-                : time.second}';
+            '${(time.minute.toString().length == 1) ? time.minute.toString().padLeft(2, '0') : time.minute}:'
+            '${(time.second.toString().length == 1) ? time.second.toString().padLeft(2, '0') : time.second}';
       });
       registerSp8010(context);
     }
@@ -295,15 +374,15 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
     SharedPreferences.getInstance().then((prefs) {
       String? group = prefs.getString('group');
       String? name = prefs.getString('first_name');
-      double hour = double.parse('${time.hour.toString()}.${(time.minute<10)?
-      time.minute.toString().padLeft(2,'0'):time.minute.toString().padRight(2,'0')}');
-      String month = (time.month.toString().length==1)
-            ? time.month.toString().padLeft(2,'0')
-            : time.month.toString();
-      String day = (time.day.toString().length==1)
-          ? time.day.toString().padLeft(2,'0')
+      double hour = double.parse(
+          '${time.hour.toString()}.${(time.minute < 10) ? time.minute.toString().padLeft(2, '0') : time.minute.toString().padRight(2, '0')}');
+      String month = (time.month.toString().length == 1)
+          ? time.month.toString().padLeft(2, '0')
+          : time.month.toString();
+      String day = (time.day.toString().length == 1)
+          ? time.day.toString().padLeft(2, '0')
           : time.day.toString();
-      String date = time.year.toString()+month+day;
+      String date = time.year.toString() + month + day;
 
       String matricula = '';
       String dpto = '';
@@ -316,34 +395,40 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
       });
 
       Sp8010 internalSp8010 = Sp8010(
-        p8_mat: matricula,
-        p8_data: date,
-        p8_hora: hour,
-        p8_depto: dpto,
-        p8_seqjrn: 0,
-        p8_motivrg: '',
-        p8_usuario: matricula,
-        d_e_l_e_t_field: '',
-        r_e_c_n_o_field: 0,
-        r_e_c_d_e_l_field: 0);
+          p8_mat: matricula,
+          p8_data: date,
+          p8_hora: hour,
+          p8_depto: dpto,
+          p8_seqjrn: 0,
+          p8_motivrg: '',
+          p8_usuario: matricula,
+          d_e_l_e_t_field: '',
+          r_e_c_n_o_field: 0,
+          r_e_c_d_e_l_field: 0);
 
       _sp8010Service.register(internalSp8010).then((value) {
         if (value) {
-          Navigator.pop(context, DisposeStatus.success);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => (name != null && group != null)
-                  ? HomeScreen(
-                      selectedIndex: 0,
-                      name: name,
-                      userGroup: group,
-                    )
-                  : Container(),
-            ),
-          );
+          setState(() {
+            isRequestReady = true;
+          });
+          //Navigator.pop(context, DisposeStatus.success);
+          //Navigator.push(
+          //  context,
+          //  MaterialPageRoute(
+          //    builder: (context) => (name != null && group != null)
+          //        ? HomeScreen(
+          //            selectedIndex: 0,
+          //            name: name,
+          //            userGroup: group,
+          //          )
+          //        : Container(),
+          //  ),
+          //);
           return SuccessDialog(context, 'Ponto registrado com Sucesso!');
         } else {
+          setState(() {
+            isRequestReady = true;
+          });
           Navigator.pop(context, DisposeStatus.error);
           return ErrorDialog(context, 'Erro na solicitação, tente mais tarde!');
         }
@@ -373,13 +458,17 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
           }
         });
 
-        _worldtimeService.getAll().then((List<String> listWorldTime){
-          for (String worldtime in listWorldTime){
-            if(mounted){
+        _worldtimeService.getAll().then((List<String> listWorldTime) {
+          for (String worldtime in listWorldTime) {
+            if (mounted) {
               setState(() {
-                time = DateTime(int.parse(worldtime.substring(0,4)), int.parse(worldtime.substring(5,7)),
-                    int.parse(worldtime.substring(8,10)), int.parse(worldtime.substring(11,13)),
-                    int.parse(worldtime.substring(14,16)), int.parse(worldtime.substring(17,19)));
+                time = DateTime(
+                    int.parse(worldtime.substring(0, 4)),
+                    int.parse(worldtime.substring(5, 7)),
+                    int.parse(worldtime.substring(8, 10)),
+                    int.parse(worldtime.substring(11, 13)),
+                    int.parse(worldtime.substring(14, 16)),
+                    int.parse(worldtime.substring(17, 19)));
               });
             }
           }
@@ -389,9 +478,9 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
           if (mounted) {
             setState(() {
               for (Sze010 sze010 in listSze010) {
-                  if(id == sze010.ze_mat){
-                    name.add(sze010.ze_nome.trim());
-                  }
+                if (id == sze010.ze_mat) {
+                  name.add(sze010.ze_nome.trim());
+                }
                 databaseSze[sze010.ze_mat] = sze010;
               }
 
@@ -402,10 +491,10 @@ class _AddPontoEletronicoScreenState extends State<AddPontoEletronicoScreen> {
         });
 
         _srh010Service.getId(id).then((List<FeriasSze> listSrh010) {
-          if(mounted){
+          if (mounted) {
             setState(() {
               databaseVacation = {};
-              for(FeriasSze srh010 in listSrh010){
+              for (FeriasSze srh010 in listSrh010) {
                 databaseVacation[srh010.r_e_c_n_o_field] = srh010;
               }
             });

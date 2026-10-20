@@ -46,7 +46,7 @@ class _BancoHorasTileCardState extends State<BancoHorasTileCard> {
                         '${widget.spi010!.pi_data.substring(4, 6)}/'
                         '${widget.spi010!.pi_data.substring(0, 4)}: '
                         '${widget.spi010!.pi_quant.toString().replaceAll('.', ',')} horas: ${widget.nome}',
-                style: GoogleFonts.acme(
+                style: GoogleFonts.actor(
                   textStyle: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.normal,
@@ -55,102 +55,7 @@ class _BancoHorasTileCardState extends State<BancoHorasTileCard> {
                   ),
                 ),
               ),
-              onLongPress: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SimpleDialog(
-                        title: Text(
-                          'O que deseja fazer?',
-                          style: GoogleFonts.acme(
-                            textStyle: const TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                        children: <Widget>[
-                          SimpleDialogOption(
-                            onPressed: () {
-                              callAddSpi010Screen(context);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(Icons.edit),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 14.0),
-                                  child: Text(
-                                    'Editar',
-                                    style: GoogleFonts.acme(
-                                      textStyle: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SimpleDialogOption(
-                            onPressed: () {
-                              deleteSpi010(context);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(Icons.delete),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 14.0),
-                                  child: Text(
-                                    'Deletar',
-                                    style: GoogleFonts.acme(
-                                      textStyle: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.red,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SimpleDialogOption(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(Icons.cancel_outlined),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 14.0),
-                                  child: Text(
-                                    'Cancelar',
-                                    style: GoogleFonts.acme(
-                                      textStyle: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.blueGrey,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      );
-                    });
-              })
+              onLongPress: () {})
           : ListTile(
               title: Text(
                 (widget.detail == 1)
@@ -162,7 +67,7 @@ class _BancoHorasTileCardState extends State<BancoHorasTileCard> {
                         '${widget.spi010!.pi_data.substring(4, 6)}/'
                         '${widget.spi010!.pi_data.substring(0, 4)}: '
                         '${widget.spi010!.pi_quant.toString().replaceAll('.', ',')} horas - ${widget.nome}',
-                style: GoogleFonts.acme(
+                style: GoogleFonts.actor(
                   textStyle: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.normal,
@@ -176,7 +81,7 @@ class _BancoHorasTileCardState extends State<BancoHorasTileCard> {
       return ListTile(
         title: Text(
           'Nenhuma hora cadastrado',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,

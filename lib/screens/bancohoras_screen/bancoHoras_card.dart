@@ -57,7 +57,7 @@ class _BancoHorasCardState extends State<BancoHorasCard> {
       dividerColor: Colors.grey,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          this.isExpanded = !isExpanded;
+          this.isExpanded = isExpanded;
         });
       },
       children: [

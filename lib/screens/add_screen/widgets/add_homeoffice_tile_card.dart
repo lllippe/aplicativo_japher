@@ -34,7 +34,7 @@ class _AddHomeOfficeTileCardState extends State<AddHomeOfficeTileCard> {
                 : Colors.transparent),
         title: Text(
           widget.sze010!.ze_nome.trim(),
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
@@ -63,7 +63,7 @@ class _AddHomeOfficeTileCardState extends State<AddHomeOfficeTileCard> {
       return ListTile(
         title: Text(
           'Nenhuma hora cadastrado',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,

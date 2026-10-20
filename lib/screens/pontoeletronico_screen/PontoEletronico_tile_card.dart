@@ -21,7 +21,7 @@ class _PontoEletronicoTileCardState extends State<PontoEletronicoTileCard> {
       return ListTile(
         title: Text(
           'Horário do Registro: ${widget.sp8010!.p8_hora.toString().replaceAll('.', ':')} hrs',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
@@ -34,7 +34,7 @@ class _PontoEletronicoTileCardState extends State<PontoEletronicoTileCard> {
       return ListTile(
         title: Text(
           'Nenhum ponto cadastrado',
-          style: GoogleFonts.acme(
+          style: GoogleFonts.actor(
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,

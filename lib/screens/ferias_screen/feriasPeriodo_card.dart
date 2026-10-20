@@ -44,7 +44,7 @@ class _FeriasPeriodoCardState extends State<FeriasPeriodoCard> {
       dividerColor: Colors.grey,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          this.isExpanded = !isExpanded;
+          this.isExpanded = isExpanded;
         });
       },
       children: [

@@ -7,6 +7,7 @@ import 'package:projeto_aucs/models/srh010.dart';
 import 'package:projeto_aucs/models/sze010.dart';
 import 'package:projeto_aucs/models/sze010_falta_dias.dart';
 import 'package:projeto_aucs/screens/add_screen/add_pontoeletronico_screen.dart';
+import 'package:projeto_aucs/screens/commom/error_dialog.dart';
 import 'package:projeto_aucs/screens/pontoeletronico_screen/pontoEletronico_screen_list.dart';
 import 'package:projeto_aucs/services/ferias_service.dart';
 import 'package:projeto_aucs/services/periodo_service.dart';
@@ -55,7 +56,7 @@ class _PontoEletronicoState extends State<PontoEletronico> {
   List<TableRow> tableContainerPeriodos = [];
   List<ListTile> listTile = [];
   bool _isloading = false;
-    TextEditingController inicioController = TextEditingController();
+  TextEditingController inicioController = TextEditingController();
   TextEditingController fimController = TextEditingController();
   DateTime? pickedDateFim;
   DateTime? pickedDateInicio;
@@ -63,8 +64,9 @@ class _PontoEletronicoState extends State<PontoEletronico> {
   List<String> name = [];
   bool _isSearchReady = false;
   bool _showSearch = false;
-  String returnSearch = 'Realize sua pesquisa.';
+  String returnSearch = '';
   bool isExpanded = false;
+  bool isRequestReady = true;
 
   @override
   void initState() {
@@ -86,32 +88,44 @@ class _PontoEletronicoState extends State<PontoEletronico> {
         ? DefaultTabController(
             length: 2, // This is the number of tabs.
             child: Scaffold(
+              backgroundColor: Colors.blueGrey.withAlpha(30),
               body: NestedScrollView(
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
-                      titleTextStyle: GoogleFonts.acme(
+                      automaticallyImplyLeading: false,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Icon(
+                              Icons.punch_clock,
+                              size: 30,
+                              color: Colors.black.withAlpha(180),
+                            ),
+                          ),
+                          const Text('Ponto Eletrônico'),
+                        ],
+                      ),
+                      titleTextStyle: GoogleFonts.actor(
                           textStyle: const TextStyle(
-                        fontSize: 30,
+                        fontSize: 25,
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
                       )),
                       backgroundColor: Colors.greenAccent,
-                      title: const Text(
-                        'Ponto Eletronico',
-                        textAlign: TextAlign.center,
-                      ),
                       pinned: true,
                       floating: true,
                       bottom: TabBar(
-                        labelStyle: GoogleFonts.acme(
+                        labelStyle: GoogleFonts.actor(
                             textStyle: const TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 23,
                         )),
                         labelColor: Colors.black,
                         indicatorColor: Colors.black,
-                        unselectedLabelStyle: GoogleFonts.acme(
+                        unselectedLabelStyle: GoogleFonts.actor(
                           textStyle: const TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 18,
@@ -138,213 +152,313 @@ class _PontoEletronicoState extends State<PontoEletronico> {
                         isLoading: true,
                       ),
                       SingleChildScrollView(
-                        child: Row(
+                        child: Column(
                           children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: width_screen - 30,
-                                  height: 300,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 14.0),
-                                        child: TextField(
-                                            controller: inicioController,
-                                            style:
-                                                const TextStyle(fontSize: 18),
-                                            decoration: const InputDecoration(
-                                              labelText: "Data Inicial: ",
-                                            ),
-                                            readOnly: true,
-                                            onTap: () async {
-                                              pickedDateInicio =
-                                                  await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: initialDate,
-                                                lastDate: lastDate,
-                                              );
-
-                                              if (pickedDateInicio != null) {
-                                                String formattedDate =
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(
-                                                            pickedDateInicio!);
-
-                                                setState(() {
-                                                  inicioController.text =
-                                                      formattedDate;
-                                                });
-                                              } else {
-                                                String formattedDate =
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(initialDate);
-
-                                                setState(() {
-                                                  formattedDate; //set foratted date to TextField value.
-                                                });
-                                              }
-                                            }),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        const EdgeInsets.only(left: 14.0),
-                                        child: TextField(
-                                            controller: fimController,
-                                            style:
-                                            const TextStyle(fontSize: 18),
-                                            decoration: const InputDecoration(
-                                              labelText: "Data Final: ",
-                                            ),
-                                            readOnly: true,
-                                            onTap: () async {
-                                              pickedDateFim =
-                                              await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: initialDate,
-                                                lastDate: lastDate,
-                                              );
-
-                                              if (pickedDateFim != null) {
-                                                String formattedDate =
-                                                DateFormat('dd/MM/yyyy')
-                                                    .format(
-                                                    pickedDateFim!);
-
-                                                setState(() {
-                                                  fimController.text =
-                                                      formattedDate;
-                                                });
-                                              } else {
-                                                String formattedDate =
-                                                DateFormat('dd/MM/yyyy')
-                                                    .format(initialDate);
-
-                                                setState(() {
-                                                  formattedDate; //set foratted date to TextField value.
-                                                });
-                                              }
-                                            }),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10, left: 10.0, right: 10),
+                              child: Card(
+                              elevation: 8,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  side: BorderSide(
+                                    color: Colors.black.withAlpha(20), // Border color
+                                    width: 1, // Border width
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10.0),
+                                          child: Icon(
+                                            Icons.date_range,
+                                            size: 30,
+                                            color: Colors.black.withAlpha(80),
+                                          ),
+                                        ),
+                                        Column(
                                           children: [
-                                            const Padding(
+                                            Padding(
                                               padding:
-                                                  EdgeInsets.only(left: 8.0),
-                                              child: Text(
-                                                'Colaborador',
-                                                style: TextStyle(fontSize: 20),
+                                                  const EdgeInsets.only(left: 14.0),
+                                              child: SizedBox(
+                                                width: width_screen - 120,
+                                                child: TextField(
+                                                    controller: inicioController,
+                                                    style:
+                                                        const TextStyle(fontSize: 16),
+                                                    decoration: const InputDecoration(
+                                                      labelText: "Data Inicial: ",
+                                                    ),
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      pickedDateInicio =
+                                                          await showDatePicker(
+                                                        context: context,
+                                                        initialDate: DateTime.now(),
+                                                        firstDate: initialDate,
+                                                        lastDate: lastDate,
+                                                      );
+                                                
+                                                      if (pickedDateInicio != null) {
+                                                        String formattedDate =
+                                                            DateFormat('dd/MM/yyyy')
+                                                                .format(
+                                                                    pickedDateInicio!);
+                                                
+                                                        setState(() {
+                                                          inicioController.text =
+                                                              formattedDate;
+                                                        });
+                                                      } else {
+                                                        String formattedDate =
+                                                            DateFormat('dd/MM/yyyy')
+                                                                .format(initialDate);
+                                                
+                                                        setState(() {
+                                                          formattedDate; //set foratted date to TextField value.
+                                                        });
+                                                      }
+                                                    }),
                                               ),
                                             ),
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.only(left: 8.0),
-                                              child: DropdownButton<String>(
-                                                value: departamento,
-                                                icon: const Icon(
-                                                    Icons.arrow_downward),
-                                                elevation: 16,
-                                                style: const TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    color: Colors.deepPurple,
-                                                    fontSize: 16),
-                                                items: name.map<
-                                                        DropdownMenuItem<
-                                                            String>>(
-                                                    (String value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: value,
-                                                    child: SizedBox(
-                                                      width: width_screen - 100,
-                                                      child: Text(
-                                                        value,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
+                                                  const EdgeInsets.only(left: 14.0),
+                                              child: SizedBox(
+                                                width: width_screen - 120,
+                                                child: TextField(
+                                                    controller: fimController,
+                                                    style:
+                                                        const TextStyle(fontSize: 16),
+                                                    decoration: const InputDecoration(
+                                                      labelText: "Data Final: ",
                                                     ),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (String? value) {
-                                                  // This is called when the user selects an item.
-                                                  setState(() {
-                                                    departamento = value!;
-                                                  });
-                                                },
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      pickedDateFim =
+                                                          await showDatePicker(
+                                                        context: context,
+                                                        initialDate: DateTime.now(),
+                                                        firstDate: initialDate,
+                                                        lastDate: lastDate,
+                                                      );
+                                                
+                                                      if (pickedDateFim != null) {
+                                                        String formattedDate =
+                                                            DateFormat('dd/MM/yyyy')
+                                                                .format(pickedDateFim!);
+                                                
+                                                        setState(() {
+                                                          fimController.text =
+                                                              formattedDate;
+                                                        });
+                                                      } else {
+                                                        String formattedDate =
+                                                            DateFormat('dd/MM/yyyy')
+                                                                .format(initialDate);
+                                                
+                                                        setState(() {
+                                                          formattedDate; //set foratted date to TextField value.
+                                                        });
+                                                      }
+                                                    }),
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 2.0, bottom: 2),
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.greenAccent),
-                                          ),
-                                          onPressed: () {
-                                            search();
-                                          },
-                                          child: Text(
-                                            'Pesquisar',
-                                            style: GoogleFonts.acme(
-                                              textStyle:
-                                                  const TextStyle(fontSize: 30),
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ), // Inicio Ferias
-                                ),
-                                (_isSearchReady)
-                                    ? (_showSearch)
-                                      ? SizedBox(
-                                          width: width_screen - 20,
-                                          height: 500,
-                                          child: ListView(
-                                            physics: const NeverScrollableScrollPhysics(),
-                                              controller: _listScrollController,
-                                              children: generateListPontoEletronicoCards(
-                                                databaseSintetico: databasePontoSintetico,
-                                                database: databasePonto,
-                                              ),
-                                            ),
                                         )
-                                      : const Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 8.0),
+                                            child: Icon(
+                                              Icons.person,
+                                              size: 25,
+                                              color: Colors.black.withAlpha(80),
+                                            )
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0, right: 20),
+                                            child: DropdownButton<String>(
+                                              value: departamento,
+                                              icon: const Icon(
+                                                  Icons.arrow_downward),
+                                              elevation: 16,
+                                              style: const TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  color: Colors.black,
+                                                  fontSize: 16),
+                                              items: name.map<
+                                                      DropdownMenuItem<
+                                                          String>>(
+                                                  (String value) {
+                                                return DropdownMenuItem<
+                                                    String>(
+                                                  value: value,
+                                                  child: SizedBox(
+                                                    width: width_screen - 150,
+                                                    child: Text(
+                                                      value,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  departamento = value!;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 2.0, bottom: 15),
+                                      child: (isRequestReady)
+                                          ? InkWell(
+                                              onTap: () {
+                                                if (inicioController.text == '' || fimController.text == '') {
+                                                  ErrorDialog(context, "Favor selecionar data inicial e final.");
+                                                } else {
+                                                  setState(() {
+                                                    isRequestReady = false;
+                                                  });
+                                                  search();
+                                                }
+                                                },
+                                                child: Container(
+                                                  width: 150,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.greenAccent,
+                                                    borderRadius: BorderRadius.circular(30)
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 8.0),
+                                                          child: Text(
+                                                            'Pesquisar',
+                                                            style: GoogleFonts.actor(
+                                                              textStyle: const TextStyle(fontSize: 20),
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(30),
+                                                            color: Colors.black.withAlpha(50)
+                                                          ),
+                                                          child: const Icon(
+                                                            Icons.chevron_right_rounded, 
+                                                            size: 30, 
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                  ErrorDialog(context,
+                                                    'Aguarde o processamento');
+                                                },
+                                                child: Container(
+                                                  width: 150,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.circular(30)
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 4, top: 4),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 8.0),
+                                                          child: Text(
+                                                            'Aguarde',
+                                                            style: GoogleFonts.actor(
+                                                              textStyle: const TextStyle(fontSize: 20),
+                                                              color: Colors.black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                            )
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            (_isSearchReady)
+                                ? (_showSearch)
+                                    ? Padding(
+                                      padding: const EdgeInsets.only(top: 20.0),
+                                      child: SizedBox(
+                                          width: width_screen - 20,
+                                          height: 300,
+                                          child: ListView(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            controller: _listScrollController,
+                                            children:
+                                                generateListPontoEletronicoCards(
+                                              databaseSintetico:
+                                                  databasePontoSintetico,
+                                              database: databasePonto,
+                                            ),
+                                          ),
+                                        ),
+                                    )
+                                    : const Padding(
+                                      padding: EdgeInsets.only(top: 40.0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Center(
-                                              child: CircularProgressIndicator(),
+                                              child:
+                                                  CircularProgressIndicator(),
                                             ),
                                           ],
-                                        )
-                                    : SizedBox(
-                                        width: width_screen - 150,
-                                        height: 200,
-                                        child: Text(
-                                          returnSearch,
-                                          style: GoogleFonts.acme(
-                                            textStyle: const TextStyle(
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.blue),
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
                                         ),
+                                    )
+                                : SizedBox(
+                                    width: width_screen - 150,
+                                    height: 200,
+                                    child: Text(
+                                      returnSearch,
+                                      style: GoogleFonts.actor(
+                                        textStyle: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue),
                                       ),
-                              ],
-                            ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
                           ],
                         ),
                       ),
@@ -370,6 +484,9 @@ class _PontoEletronicoState extends State<PontoEletronico> {
         getPonto();
         _isSearchReady = true;
       } else {
+        setState(() {
+          isRequestReady = true;
+        });
         returnSearch = 'Os campos Data Inicial e\nData Final não podem\n'
             'ficar em branco.';
       }
@@ -384,13 +501,13 @@ class _PontoEletronicoState extends State<PontoEletronico> {
       if (firstName != null && lastName != null) {
         String matricula = '';
         String inicio = inicioController.text.substring(6, 10) +
-          inicioController.text.substring(3, 5) +
-          inicioController.text.substring(0, 2);
+            inicioController.text.substring(3, 5) +
+            inicioController.text.substring(0, 2);
         String fim = fimController.text.substring(6, 10) +
-          fimController.text.substring(3, 5) +
-          fimController.text.substring(0, 2);
+            fimController.text.substring(3, 5) +
+            fimController.text.substring(0, 2);
 
-        if(mounted){
+        if (mounted) {
           setState(() {
             _showSearch = false;
           });
@@ -402,13 +519,16 @@ class _PontoEletronicoState extends State<PontoEletronico> {
           }
         });
 
-        _sp8010Service.searchColaborador(matricula, inicio, fim).then((List<Sp8010> listSp8010) {
+        _sp8010Service
+            .searchColaborador(matricula, inicio, fim)
+            .then((List<Sp8010> listSp8010) {
           setState(() {
             databasePonto = {};
             for (Sp8010 sp8010 in listSp8010) {
               databasePonto[sp8010.r_e_c_n_o_field] = sp8010;
               databasePontoSintetico[sp8010.p8_data] = sp8010;
             }
+            isRequestReady = true;
             _showSearch = true;
           });
         });
@@ -504,13 +624,13 @@ class _PontoEletronicoState extends State<PontoEletronico> {
               _feriasColaboradorService
                   .getAll(value.rf_mat, value.rf_databas)
                   .then((List<Srh010> listPeriodoColaborador) {
-                if(mounted){
+                if (mounted) {
                   setState(() {
                     userId = id;
                     databasePeriodosColaborador = {};
                     for (Srh010 feriasColaborador in listPeriodoColaborador) {
-                      databasePeriodosColaborador[feriasColaborador.rh_dataini] =
-                          feriasColaborador;
+                      databasePeriodosColaborador[
+                          feriasColaborador.rh_dataini] = feriasColaborador;
                     }
 
                     databasePeriodosColaborador.forEach((key, value) {});
@@ -555,12 +675,12 @@ class _PontoEletronicoState extends State<PontoEletronico> {
               for (Sze010 sze010 in listSze010) {
                 if (group == '1') {
                   name.add(sze010.ze_nome.trim());
-                } else if(group == '2') {
+                } else if (group == '2') {
                   if (sze010.ze_depto == depto) {
                     name.add(sze010.ze_nome.trim());
                   }
-                } else if(group == '3'){
-                  if(id == sze010.ze_mat){
+                } else if (group == '3') {
+                  if (id == sze010.ze_mat) {
                     name.add(sze010.ze_nome.trim());
                   }
                 }

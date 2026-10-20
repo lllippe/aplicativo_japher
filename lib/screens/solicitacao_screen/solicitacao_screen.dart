@@ -96,14 +96,30 @@ class _SolicitacaoScreenState extends State<SolicitacaoScreen> {
                 database: database,
               ),
             )
-          : Text(
-              'Não há solicitações pendentes!',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.acme(
-                textStyle: const TextStyle(fontSize: 30),
-                color: Colors.black,
-              ),
+          : Padding(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Icon(
+                    Icons.check,
+                    size: 30,
+                    color: Colors.black.withAlpha(80),
+                  ),
+                ),
+                Text(
+                    'Não há solicitações pendentes!',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.actor(
+                      textStyle: const TextStyle(fontSize: 20),
+                      color: Colors.black,
+                    ),
+                  ),
+              ],
             ),
+          ),
       drawer: Drawer(
         child: menuDrawer(context),
       ),

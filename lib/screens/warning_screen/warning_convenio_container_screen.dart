@@ -41,11 +41,11 @@ class _ConvenioWarningScreenState extends State<ConvenioWarningScreen> {
                 '${widget.convenio!.ze_conveni.substring(6, 8)}/'
                 '${(currentMonth.toString().length == 1) ? currentMonth.toString().padLeft(2, '0') : currentMonth.toString()}/'
                 '${DateTime.now().year}',
-                overflow: TextOverflow.visible,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.acme(
+                overflow: TextOverflow.values.first,
+                textAlign: TextAlign.start,
+                style: GoogleFonts.actor(
                   textStyle: const TextStyle(
-                      fontSize: 23,
+                      fontSize: 18,
                       fontWeight: FontWeight.normal,
                       color: Colors.black),
                 ),
@@ -58,14 +58,17 @@ class _ConvenioWarningScreenState extends State<ConvenioWarningScreen> {
       return ListTile(
         title: Row(
           children: [
-            Text(
-              'Nenhum convênio cadastrado!',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.acme(
-                textStyle: const TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black),
+            Expanded(
+              child: Text(
+                'Nenhum convênio cadastrado!',
+                overflow: TextOverflow.values.first,
+                textAlign: TextAlign.start,
+                style: GoogleFonts.actor(
+                  textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black),
+                ),
               ),
             ),
           ],

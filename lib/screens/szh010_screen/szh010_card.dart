@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projeto_aucs/models/sqb010.dart';
 import 'package:projeto_aucs/models/sze010_falta_dias.dart';
 import 'package:projeto_aucs/screens/commom/confirmation_dialog.dart';
@@ -56,7 +57,7 @@ class _Szh010CardState extends State<Szh010Card> {
             dividerColor: Colors.grey,
             expansionCallback: (int index, bool isExpanded) {
               setState(() {
-                this.isExpanded = !isExpanded;
+                this.isExpanded = isExpanded;
               });
             },
             children: [
@@ -65,7 +66,11 @@ class _Szh010CardState extends State<Szh010Card> {
                   return ListTile(
                     title:
                     Text('${widget.sqb010!.qb_descric
-                        .trim()}  -  $soma Colaboradores'),
+                        .trim()}  -  $soma Colaboradores',
+                        style: GoogleFonts.lato(
+                          fontSize: 14,
+
+                        ),),
                   );
                 },
                 body: SizedBox(

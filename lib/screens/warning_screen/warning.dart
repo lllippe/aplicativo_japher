@@ -48,187 +48,228 @@ class WarningState extends State<Warning> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return !_isloading
-        ? Scrollbar(
-            thumbVisibility: true,
-            thickness: 10,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                    child: Card(
-                      shadowColor: Colors.tealAccent,
-                      borderOnForeground: true,
-                      elevation: 15,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Column(
+        ? Scaffold(
+          backgroundColor: Colors.blueGrey.withAlpha(30),
+          body: Scrollbar(
+              thumbVisibility: true,
+              thickness: 10,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsGeometry.only(top: 15, bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Aniversariantes do Mês',
-                              style: GoogleFonts.acme(
-                                textStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue),
-                              ),
-                            ),
+                          Icon(
+                            Icons.announcement_rounded,
+                            size: 28,
+                            color: Colors.black.withAlpha(130),
                           ),
-                          ListView(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: generateWarningScreen(
-                              database: database,
-                              refreshFunction: refresh,
-                              userId: userId,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Text(
+                              'Avisos',
+                              style: GoogleFonts.actor(
+                                fontSize: 25,
+                                color: Colors.black.withAlpha(200),
+                                fontWeight: FontWeight.bold
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                    child: Card(
-                      shadowColor: Colors.tealAccent,
-                      borderOnForeground: true,
-                      elevation: 15,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Convênio',
-                              style: GoogleFonts.acme(
-                                textStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                      child: Card(
+                        shadowColor: Colors.black,
+                        borderOnForeground: true,
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: BorderSide(
+                            color: Colors.black.withAlpha(20), // Border color
+                            width: 1, // Border width
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              width: screenWidth,
+                              child: ListView(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: generateWarningScreen(
+                                  database: database,
+                                  refreshFunction: refresh,
+                                  userId: userId,
+                                ),
                               ),
                             ),
-                          ),
-                          ListView(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: generateWarningConvenioScreen(
-                              database: databaseConvenios,
-                              refreshFunction: refresh,
-                              userId: userId,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                    child: Card(
-                      shadowColor: Colors.tealAccent,
-                      borderOnForeground: true,
-                      elevation: 15,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Situação Férias',
-                              style: GoogleFonts.acme(
-                                textStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                      child: Card(
+                        shadowColor: Colors.black,
+                        borderOnForeground: true,
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: BorderSide(
+                            color: Colors.black.withAlpha(20), // Border color
+                            width: 1, // Border width
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: 
+                              Icon(
+                                Icons.warning_rounded,
+                                size: 30,
+                                color: Colors.black.withAlpha(80),)
+                            ),
+                            SizedBox(
+                              width: screenWidth - 100,
+                              child: ListView(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: generateWarningConvenioScreen(
+                                  database: databaseConvenios,
+                                  refreshFunction: refresh,
+                                  userId: userId,
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                      child: Card(
+                        shadowColor: Colors.black,
+                        borderOnForeground: true,
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          side: BorderSide(
+                            color: Colors.black.withAlpha(20), // Border color
+                            width: 1, // Border width
                           ),
-                          (databaseFaltaDias.length > 0)
-                              ? ListView(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  children: generateWarningFeriasScreen(
-                                    databaseFaltaDias: databaseFaltaDias,
-                                    refreshFunction: refresh,
-                                    userId: userId,
-                                  ),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: 
+                              Icon(
+                                Icons.flight_takeoff_rounded,
+                                size: 25,
+                                color: Colors.black.withAlpha(80),
+                              ),
+                            ),
+                            (databaseFaltaDias.length > 0)
+                                ? SizedBox(
+                                  width: screenWidth - 100,
+                                  child: ListView(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      children: generateWarningFeriasScreen(
+                                        databaseFaltaDias: databaseFaltaDias,
+                                        refreshFunction: refresh,
+                                        userId: userId,
+                                      ),
+                                    ),
                                 )
-                              : Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(bottom: 16.0),
-                                        child: Text(
-                                          'Todo o período já foi marcado!',
-                                          overflow: TextOverflow.visible,
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.acme(
-                                            textStyle: const TextStyle(
-                                                fontSize: 23,
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black),
+                                : SizedBox(
+                                  width: screenWidth - 80,
+                                  child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(bottom: 16.0),
+                                            child: Text(
+                                              'Todo o período já foi marcado!',
+                                              overflow: TextOverflow.values.first,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.actor(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 23,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: Colors.black),
+                                              ),
+                                            ),
                                           ),
+                                        ),
+                                      ],
+                                    ),
+                                ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    (group == '1' || group == '2')
+                        ? (databaseSolicitacoesAberto.length > 0)
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 5),
+                                child: Card(
+                                  shadowColor: Colors.black,
+                                  borderOnForeground: true,
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    side: BorderSide(
+                                      color: Colors.black.withAlpha(20), // Border color
+                                      width: 1, // Border width
+                                    ),
+                                  ),
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Text(
+                                        'Solicitações de Férias em Aberto',
+                                        style: GoogleFonts.actor(
+                                          textStyle: const TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  (group == '1' || group == '2')
-                      ? (databaseSolicitacoesAberto.length > 0)
-                          ? Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 5, right: 5, bottom: 5),
-                              child: Card(
-                                shadowColor: Colors.tealAccent,
-                                borderOnForeground: true,
-                                elevation: 15,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                                child: Column(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Text(
-                                      'Solicitações de Férias em Aberto',
-                                      style: GoogleFonts.acme(
-                                        textStyle: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue),
+                                    ListView(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      children: generateWarningSolicitacoesScreen(
+                                        database: databaseSolicitacoesAberto,
+                                        refreshFunction: refresh,
+                                        userId: userId,
                                       ),
                                     ),
-                                  ),
-                                  ListView(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    children: generateWarningSolicitacoesScreen(
-                                      database: databaseSolicitacoesAberto,
-                                      refreshFunction: refresh,
-                                      userId: userId,
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                            )
-                          : Container()
-                      : Container(),
-                ],
+                                  ]),
+                                ),
+                              )
+                            : Container()
+                        : Container(),
+                  ],
+                ),
               ),
             ),
-          )
+        )
         : const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

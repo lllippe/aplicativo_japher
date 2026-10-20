@@ -26,7 +26,7 @@ Future<dynamic> showConfirmationDialog(BuildContext context,
             child: Text(
               affirmativeOption.toUpperCase(),
               style: const TextStyle(
-                  color: Colors.brown, fontWeight: FontWeight.bold),
+                  color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ),
         ],

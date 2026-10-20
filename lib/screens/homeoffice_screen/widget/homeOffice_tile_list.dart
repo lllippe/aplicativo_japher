@@ -1,6 +1,4 @@
 import 'package:projeto_aucs/models/home_office_list_names.dart';
-import 'package:projeto_aucs/models/sze010.dart';
-import 'package:projeto_aucs/models/szh010.dart';
 import 'package:projeto_aucs/screens/homeoffice_screen/widget/HomeOffice_tile_card.dart';
 
 List<HomeOfficeTileCard> generateListTilHomeOffice({

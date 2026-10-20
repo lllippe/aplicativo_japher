@@ -1,0 +1,19 @@
+dependencies:
+flutter:
+sdk: flutter
+all_validations_br: ^1.0.0
+
+/*================================================================*/
+import 'package:all_validations_br/all_validations_br.dart';
+import 'package:intl/intl.dart';
+
+DateTime dataInicio = DateTime(2025, 9, 1);
+DateTime dataFim = DateTime(2025, 9, 15);
+Map<int, List<objetoSpi>> dictSpi = {};
+
+int diasUteis = businessDaysBetween(dataInicio, dataFim); 
+
+for(i = 0, i <= diasUteis, i++) {
+	dictSpi[i] = objetoSpi();
+	next i;
+}
